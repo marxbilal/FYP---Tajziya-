@@ -1,0 +1,33 @@
+import tweepy
+import sys
+
+class MyStreamListener(tweepy.Stream):
+    def on_status(self,status):
+        print(status.text)
+        with open('D:\\tweets.csv', 'a', encoding='utf-16') as f:
+                f.write(status.text)
+                f.close()
+    def on_error(self,status_code):
+        print(status_code)
+
+
+consumer_key="Wvu5aNI0IuUKqQLTDC9W3uuyF"
+consumer_secret="IhD10WzLgtNmHzCdXVRwLKN3g4QJw6aOzVo1poYQqZ2LV42dhl"
+access_token="1270342846911057923-1dk6FZBLvoHKPev6387c5Sd3AXKdLg"
+access_token_secret="xdcoA3lH9tAgPfqPp3ihQZF6OpVq3OsDgv3hgbdwltMQo"
+
+
+auth = tweepy.OAuthHandler(consumer_key,consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
+api = tweepy.API(auth)
+
+if (not api):
+    print("Authentication failed!")
+    sys.exit(-1)
+
+#myStreamListener = MyStreamListener()
+# myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
+myStreamListener = MyStreamListener(consumer_key,consumer_secret, access_token, access_token_secret)
+# myStream = tweepy.Stream(consumer_key,consumer_secret, access_token, access_token_secret) # auth = api.auth, listener=myStreamListener
+myStreamListener.filter(track=['ہو'], languages=["ur"] )
+
