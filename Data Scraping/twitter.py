@@ -1,21 +1,40 @@
 import tweepy
+import pandas as pd
 import sys
 
 class MyStreamListener(tweepy.Stream):
+
+    df = pd.DataFrame(columns=['text','timestamp'])
+    target = 100
+    count = 0
+
     def on_status(self,status):
-        print(status.text)
-        with open('D:\\tweets.csv', 'a', encoding='utf-16') as f:
-                f.write(status.text)
-                f.close()
+        dict = status._json
+        self.add_to_df(dict)
+        if(self.count == self.target):
+            self.df.to_csv("tweets.csv")
+            exit()
+        else:
+            self.count = self.count + 1
+
     def on_error(self,status_code):
         print(status_code)
+
+    def add_to_df(self, dict):
+        if(dict['truncated'] == True):
+            tweet = pd.DataFrame({'text': dict['extended_tweet']['full_text'], 'timestamp': dict['created_at']},index = [self.count])
+        else:
+            tweet = pd.DataFrame({'text': dict['text'], 'timestamp': dict['created_at']},index = [self.count])
+        print('\n')
+        print("{} TRUNCATED = {} ".format(tweet,dict['truncated']))
+        self.df = pd.concat([self.df,tweet])
+        
 
 
 consumer_key="Wvu5aNI0IuUKqQLTDC9W3uuyF"
 consumer_secret="IhD10WzLgtNmHzCdXVRwLKN3g4QJw6aOzVo1poYQqZ2LV42dhl"
 access_token="1270342846911057923-1dk6FZBLvoHKPev6387c5Sd3AXKdLg"
 access_token_secret="xdcoA3lH9tAgPfqPp3ihQZF6OpVq3OsDgv3hgbdwltMQo"
-
 
 auth = tweepy.OAuthHandler(consumer_key,consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
