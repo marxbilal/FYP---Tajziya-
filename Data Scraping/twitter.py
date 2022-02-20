@@ -5,7 +5,7 @@ import sys
 class MyStreamListener(tweepy.Stream):
 
     df = pd.DataFrame(columns=['text','timestamp'])
-    target = 100
+    target = 1000
     count = 0
 
     def on_status(self,status):
