@@ -1,7 +1,7 @@
 import tweepy
 import pandas as pd
 import sys
-import timestamp
+#import timestamp
 class MyStreamListener(tweepy.Stream):
 
     df = pd.DataFrame(columns=['text','timestamp'])
@@ -13,12 +13,12 @@ class MyStreamListener(tweepy.Stream):
         # print(dir(status))
         # print('\n {}'.format(status.truncated))
         # exit()
-        print(self.count)
+        #print(self.count)
 
         dict = status._json
         self.add_to_df(dict)
         if(self.count == self.target):
-            self.df.to_csv("D:\IBA-UNI\FYP\FYP---Tajziya\\tweets.csv")
+            self.df.to_csv("..\\tweets.csv")
             exit()
         else:
             self.count = self.count + 1
