@@ -9,10 +9,16 @@ class MyStreamListener(tweepy.Stream):
     count = 0
 
     def on_status(self,status):
+
+        # print(dir(status))
+        # print('\n {}'.format(status.truncated))
+        # exit()
+        print(self.count)
+
         dict = status._json
         self.add_to_df(dict)
         if(self.count == self.target):
-            self.df.to_csv("tweets.csv")
+            self.df.to_csv("D:\IBA-UNI\FYP\FYP---Tajziya\\tweets.csv")
             exit()
         else:
             self.count = self.count + 1
@@ -26,7 +32,7 @@ class MyStreamListener(tweepy.Stream):
         else:
             tweet = pd.DataFrame({'text': dict['text'], 'timestamp': dict['created_at']},index = [self.count])
         print('\n')
-        print("{} TRUNCATED = {} ".format(tweet,dict['truncated']))
+        # print("{} TRUNCATED = {} ".format(tweet,dict['truncated']))
         self.df = pd.concat([self.df,tweet])
         
 
