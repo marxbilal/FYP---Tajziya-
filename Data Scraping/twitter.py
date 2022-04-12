@@ -4,7 +4,7 @@ import sys
 #import timestamp
 class MyStreamListener(tweepy.Stream):
 
-    df = pd.DataFrame(columns=['text','timestamp'])
+    df = pd.DataFrame(columns=['tweets','timestamp'])
     target = 1000
     count = 0
 
@@ -28,9 +28,9 @@ class MyStreamListener(tweepy.Stream):
 
     def add_to_df(self, dict):
         if(dict['truncated'] == True):
-            tweet = pd.DataFrame({'text': dict['extended_tweet']['full_text'], 'timestamp': dict['created_at']},index = [self.count])
+            tweet = pd.DataFrame({'tweets': dict['extended_tweet']['full_text'], 'timestamp': dict['created_at']},index = [self.count])
         else:
-            tweet = pd.DataFrame({'text': dict['text'], 'timestamp': dict['created_at']},index = [self.count])
+            tweet = pd.DataFrame({'tweets': dict['text'], 'timestamp': dict['created_at']},index = [self.count])
         print('\n')
         # print("{} TRUNCATED = {} ".format(tweet,dict['truncated']))
         self.df = pd.concat([self.df,tweet])
