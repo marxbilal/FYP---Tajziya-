@@ -1,0 +1,16 @@
+integrating python with node.js
+
+- create express server(server.js)
+- define python class/functions
+
+** Calling python script via child process:
+- calling the spawn function to run the program(python nlp), and passing arguments including the class name and any parameters.
+- using stdout to get the python file output, and then render it to the webpage.
+- This process is quick and shorthand, but since the nested program runs, therefore performance can be compromised.
+
+** Using a message broker
+- runs python and node.js as separate processes
+- uses message broker to communicate bw the two process
+- RabbitMQ, amqplib for node; pika for Python
+- two queues: to send requests and receive results
+- RabbitMQ can be replaced by ZeroMQ for low latency
