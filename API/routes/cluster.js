@@ -18,7 +18,7 @@ router.post("/", (req, res) => {
       largeDataset = largeDataset.join("");
       // largeDataset = largeDataset.substring(0, largeDataset.length - 2);
       largeDataset = JSON.parse(largeDataset);
-      res.status(500).json(largeDataset);
+      res.status(200).json(largeDataset);
     });
   } else {
   }
