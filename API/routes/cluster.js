@@ -1,27 +1,17 @@
 import express from "express";
-import { spawn } from "child_process";
+import fileupload from "express-fileupload"
+import cors from "cors"
+
+import {liveCluster, fileCluster} from '../controllers/cluster.js'
 
 const router = express.Router();
 
-router.post("/", (req, res) => {
-  if (req.body.filterCategory == null && req.body.filterTopic == null) {
-    let largeDataset = [];
+router.use('/file',fileupload())
 
-    const python = spawn("python", ["./python/cluster.py"]);
-    python.stdout.on("data", function (data) {
-      console.log("Pipe data from python script ...");
-      largeDataset.push(data);
-    });
+router.use('/file',cors())
 
-    python.on("close", (code) => {
-      console.log(`child process close all stdio with code ${code}`);
-      largeDataset = largeDataset.join("");
-      // largeDataset = largeDataset.substring(0, largeDataset.length - 2);
-      largeDataset = JSON.parse(largeDataset);
-      res.status(200).json(largeDataset);
-    });
-  } else {
-  }
-});
+router.post("/", liveCluster);
+
+router.post("/file",fileCluster);
 
 export default router;
