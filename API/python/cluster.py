@@ -1,4 +1,6 @@
-
+import sys
+import os
+from preprocess import preprocessFile
 from sklearn.cluster import KMeans
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import normalize
@@ -9,11 +11,7 @@ import json
 import random
 
 
-data = pd.read_csv('./data/preprocessed.csv',
-                   encoding='utf-8', on_bad_lines='skip')
-
-
-def tfidf():
+def tfidf(data):
 
     tf_idf_vectorizor = TfidfVectorizer(max_features=5000)
     tf_idf = tf_idf_vectorizor.fit_transform(data['tweets'][:])
@@ -25,8 +23,8 @@ def tfidf():
     return tf_idf_array
 
 
-def cluster(k):
-    tf_idf_array = tfidf()
+def cluster(k,data):
+    tf_idf_array = tfidf(data)
 
     sklearn_pca = PCA(n_components=2)
     Y_sklearn = sklearn_pca.fit_transform(tf_idf_array)
@@ -64,7 +62,16 @@ def transformToDataset(raw):
 
 
 if __name__ == "__main__":
-    clusters = cluster(3)
-    transformedCluster = transformToDataset(clusters)
-    c = json.dumps(transformedCluster)
+    try:
+        if(sys.argv[1] == "file"):
+            data = pd.read_csv('./data/file_tweets.csv', encoding='utf-8', on_bad_lines='skip')
+            os.remove('./data/file_tweets.csv')
+            data = preprocessFile(data)
+        else:
+            data = pd.read_csv('./data/preprocessed_default.csv', encoding='utf-8', on_bad_lines='skip')
+        clusters = cluster(3,data)
+        transformedCluster = transformToDataset(clusters)
+        c = json.dumps(transformedCluster)
+    except Exception as e:
+            c = json.dumps({'error': "Python Exception" + str(e)})
     print(c)

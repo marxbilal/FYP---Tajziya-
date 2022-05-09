@@ -1,17 +1,23 @@
 import express from "express";
-import fileupload from "express-fileupload"
-import cors from "cors"
+import multer from "multer";
 
-import {liveCluster, fileCluster} from '../controllers/cluster.js'
+import { liveCluster, fileCluster } from "../controllers/cluster.js";
 
 const router = express.Router();
 
-router.use('/file',fileupload())
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "data");
+    },
+    filename: (req, file, cb) => {
+        cb(null, "file_tweets.csv");
+    },
+});
 
-router.use('/file',cors())
+const upload = multer({ storage });
 
 router.post("/", liveCluster);
 
-router.post("/file",fileCluster);
+router.post("/file", upload.single("file"), fileCluster);
 
 export default router;
