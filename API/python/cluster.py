@@ -1,3 +1,4 @@
+from ast import keyword
 import sys
 import os
 from preprocess import preprocessFile
@@ -10,38 +11,52 @@ import pandas as pd
 import json
 import random
 
+def topKeywords(model,terms,k,n):
+    order_centroids = model.cluster_centers_.argsort()[:, ::-1]
+    topwords = []
+    for i in range(k):
+        words = []
+        for ind in order_centroids[i, :n]:
+            words.append(terms[ind])
+        topwords.append({
+            "cluster":i,
+            "words":words
+        })
+    return topwords
 
 def tfidf(data):
-
     tf_idf_vectorizor = TfidfVectorizer(max_features=5000)
     tf_idf = tf_idf_vectorizor.fit_transform(data['tweets'][:])
     tf_idf_norm = normalize(tf_idf)
 
     tf_idf_array = tf_idf_norm.toarray()
-    a = pd.DataFrame(
-        tf_idf_array, columns=tf_idf_vectorizor.get_feature_names_out())
-    return tf_idf_array
+    terms = tf_idf_vectorizor.get_feature_names()
+
+    return [tf_idf_array,terms]
 
 
 def cluster(k,data):
-    tf_idf_array = tfidf(data)
+    tf_idf_array,terms = tfidf(data)
 
     sklearn_pca = PCA(n_components=2)
     Y_sklearn = sklearn_pca.fit_transform(tf_idf_array)
-
     model = KMeans(n_clusters=k).fit(Y_sklearn)
+    keywordModel = KMeans(n_clusters=k).fit(tf_idf_array)
     labels = model.labels_
 
     Y_sklearn = Y_sklearn.tolist()
     labels = labels.tolist()
-    cluster = [Y_sklearn, labels]
+
+    
+    keywords = topKeywords(keywordModel,terms,k,10)
+
+    cluster = [Y_sklearn, labels, keywords]
 
     return cluster
 
 def transformToDataset(raw):
     cluster = []
-    Y_sklearn = raw[0]
-    labels = raw[1]
+    Y_sklearn, labels, keywords = raw
 
     clusterName = set(labels)
     for i in clusterName:
@@ -56,6 +71,8 @@ def transformToDataset(raw):
         }
         n = labels[i]
         cluster[n]['data'].append(data)
+
+    cluster = {"data" : cluster,"keywords":keywords}
     
     return cluster
 
@@ -69,9 +86,10 @@ if __name__ == "__main__":
             data = preprocessFile(data)
         else:
             data = pd.read_csv('./data/preprocessed_default.csv', encoding='utf-8', on_bad_lines='skip')
-        clusters = cluster(3,data)
-        transformedCluster = transformToDataset(clusters)
+        cluster = cluster(3,data)
+        transformedCluster = transformToDataset(cluster)
+        # print(transformedCluster)
         c = json.dumps(transformedCluster)
     except Exception as e:
-            c = json.dumps({'error': "Python Exception" + str(e)})
+        c = json.dumps({'error': "Python Exception" + str(e)})
     print(c)
