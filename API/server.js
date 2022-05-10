@@ -6,6 +6,7 @@ import cors from "cors";
 import userRoute from "./routes/user.js";
 import clusterRoute from "./routes/cluster.js";
 import adminRoute from "./routes/admin.js";
+import tagcloud from "./routes/tagcloud.js";
 import path from "./config/path.js";
 
 const app = express();
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 app.use("/user", userRoute);
 app.use("/cluster", clusterRoute);
 app.use("/admin", adminRoute);
+app.use("/tagcloud", tagcloud);
 
 mongoose.connect(path.url, { useNewUrlParser: true });
 const db = mongoose.connection;

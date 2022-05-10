@@ -4,7 +4,7 @@ from arabic_reshaper import ArabicReshaper
 import matplotlib.pyplot as plt
 import pandas as pd
 
-data = pd.read_csv('./data/preprocessed.csv',
+data = pd.read_csv('./data/preprocessed_default.csv',
                    encoding='utf-8', on_bad_lines='skip')
 
 
@@ -29,11 +29,18 @@ def tagcloud():
                            #    min_font_size=10,
                            max_font_size=70,
                            font_path='./python/NotoNaskhArabic-Regular.ttf').generate(text)
-    word_cloud.to_file("./python/max70.png")
+    word_cloud.to_file("./data/tagcloud.png")
     plt.axis("off")
     # plt.imshow(word_cloud, interpolation="bilinear")
     # plt.imsave("./python/tagcloud.png", word_cloud)
 
 
 if __name__ == "__main__":
-    tagcloud()
+    try:
+        tagcloud()
+        print(True)
+    except Exception as e:
+        print(False)
+
+    
+    
