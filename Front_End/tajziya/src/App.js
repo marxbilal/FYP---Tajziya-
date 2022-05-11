@@ -1,25 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+//import Footer from "./components/footer";
+
+import React from "react";
+import TagCloud from "./pages/tagcloud/tag";
+//import Homepage from "./pages/homepage/homepage";
+//import FileUpload from "./pages/Fileupload/FileUpload";
+
+//import Header from "./components/header";
+//import Signnup from "./components/signo";
+
+//import Clustering from "./pages/clustering/cluster";
+import Search from "./components/search";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return <Search />;
 }
 
 export default App;

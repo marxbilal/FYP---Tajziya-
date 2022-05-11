@@ -1,0 +1,12 @@
+
+#Tagcloud image signup on left side
+#Header --done
+#Clustering (Upload UI) ---https://github.com/AndrewJBateman/react-file-upload/tree/master/client/src/components
+https://github.com/abachuk/uploading-files-react-node
+#Search ---  https://dev.to/salehmubashar/search-bar-in-react-js-545l
+#Boxes (Top words in cluters)
+#OnClick bubble me
+# Toggle --https://react-bootstrap.github.io/components/spinners/
+
+Links:
+https://mdbootstrap.com/docs/b5/react/navigation/headers/
