@@ -1,6 +1,9 @@
 from ast import keyword
+from preprocess import *
+from tagcloud import * 
 import sys
 import os
+from API.python.preprocess import preprocess
 from preprocess import preprocessFile
 from sklearn.cluster import KMeans
 from sklearn.cluster import KMeans
@@ -49,12 +52,35 @@ def silhouetteScore(tf_idf_array, k):
     max_index =silhouette_avg.index(max_value)-2
     return max_index
 
-def cluster(k,data):
-    tf_idf_array,terms = tfidf(data)
 
-    # returns the index with best silhouette score 
-    k = silhouetteScore(tf_idf_array,15)
 
+def five_tweets_from_clusters(clusters):
+    for i in range(len(clusters)):
+        print("Cluster: " + str(i))
+        for j in range(min(len(clusters[i]),5)):
+            print(clusters[i][j]+'\n')
+            
+
+def get_text_of_each_cluster(df, k, labels):
+    unprocessed_clusters = []
+    preprocessed_clusters = []
+    for i in range(k):
+        unprocessed_clusters.append([])
+        preprocessed_clusters.append([])
+    
+    for i,row in df.iterrows():
+        unprocessed_clusters[labels[i]].append(row['tweets'])
+        preprocessed_clusters[labels[i]].append(preprocess.preprocess(row['tweets']))
+    
+    return [unprocessed_clusters, preprocessed_clusters]
+
+
+def wordcloud_for_cluster(clusters_clean_text, cluster_index):
+    generate_word_cloud(clusters_clean_text[cluster_index])
+
+
+def cluster(k, tf_idf_array,terms):
+    
     sklearn_pca = PCA(n_components=2)
     Y_sklearn = sklearn_pca.fit_transform(tf_idf_array)
     model = KMeans(n_clusters=k).fit(Y_sklearn)
@@ -63,13 +89,13 @@ def cluster(k,data):
 
     Y_sklearn = Y_sklearn.tolist()
     labels = labels.tolist()
-
     
     keywords = topKeywords(keywordModel,terms,k,10)
 
     cluster = [Y_sklearn, labels, keywords]
 
-    return cluster
+    return [labels, cluster]
+
 
 def transformToDataset(raw):
     cluster = []
@@ -103,11 +129,24 @@ if __name__ == "__main__":
             data = preprocessFile(data)
         else:
             data = pd.read_csv('./data/preprocessed_default.csv', encoding='utf-8', on_bad_lines='skip')
-            
-        cluster = cluster(data)
+        
+        tf_idf_array,terms = tfidf(data)
+        
+        # returns the index with best silhouette score 
+        k = silhouetteScore(tf_idf_array,15)    
+        
+        labels, cluster = cluster(k, tf_idf_array, terms)
+
         transformedCluster = transformToDataset(cluster)
         # print(transformedCluster)
         c = json.dumps(transformedCluster)
+
+        raw_cluster_text, clean_cluster_text =  get_text_of_each_cluster(data, k, labels)
+
+        
+    
     except Exception as e:
         c = json.dumps({'error': "Python Exception" + str(e)})
     print(c)
+
+    
