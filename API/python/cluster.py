@@ -4,7 +4,8 @@ import os
 from preprocess import preprocessFile
 from sklearn.cluster import KMeans
 from sklearn.cluster import KMeans
-from sklearn.preprocessing import normalize
+from sklearn.metrics import silhouette_score
+from sklearn.preprocessing import normalize 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import PCA
 import pandas as pd
@@ -25,18 +26,34 @@ def topKeywords(model,terms,k,n):
     return topwords
 
 def tfidf(data):
-    tf_idf_vectorizor = TfidfVectorizer(max_features=5000)
-    tf_idf = tf_idf_vectorizor.fit_transform(data['tweets'][:])
+    tf_idf_vectorizer = TfidfVectorizer(max_features=5000)
+    tf_idf = tf_idf_vectorizer.fit_transform(data['tweets'][:])
     tf_idf_norm = normalize(tf_idf)
 
     tf_idf_array = tf_idf_norm.toarray()
-    terms = tf_idf_vectorizor.get_feature_names()
+    terms = tf_idf_vectorizer.get_feature_names()
 
     return [tf_idf_array,terms]
 
 
+#returns the index with best silhouette score 
+def silhouetteScore(tf_idf_array, k):
+    range_n_clusters = range(2,k)
+    silhouette_avg = []
+    for i in range_n_clusters:
+        kmeans = KMeans(n_clusters=i, random_state= 42)  
+        kmeans.fit(tf_idf_array)  
+        score = silhouette_score(tf_idf_array, kmeans.labels_, metric='euclidean')
+        silhouette_avg.append(score)
+    max_value = max(silhouette_avg)
+    max_index =silhouette_avg.index(max_value)-2
+    return max_index
+
 def cluster(k,data):
     tf_idf_array,terms = tfidf(data)
+
+    # returns the index with best silhouette score 
+    k = silhouetteScore(tf_idf_array,15)
 
     sklearn_pca = PCA(n_components=2)
     Y_sklearn = sklearn_pca.fit_transform(tf_idf_array)
@@ -86,7 +103,8 @@ if __name__ == "__main__":
             data = preprocessFile(data)
         else:
             data = pd.read_csv('./data/preprocessed_default.csv', encoding='utf-8', on_bad_lines='skip')
-        cluster = cluster(3,data)
+            
+        cluster = cluster(data)
         transformedCluster = transformToDataset(cluster)
         # print(transformedCluster)
         c = json.dumps(transformedCluster)
