@@ -7,22 +7,6 @@ import pandas as pd
 data = pd.read_csv('./data/preprocessed_default.csv',
                    encoding='utf-8', on_bad_lines='skip')
 
-def generate_word_cloud(text):
-    configuration = {
-        "language": "Urdu"
-    }
-    reshaper = ArabicReshaper(configuration=configuration)
-
-    text = reshaper.reshape(text)
-    text = get_display(text)
-
-    word_cloud = WordCloud(collocations = False, background_color = 'white', 
-                           scale=5,
-                           max_font_size=70,
-                           font_path='NotoNaskhArabic-Regular.ttf').generate(text)
-    plt.axis("off")
-    plt.imshow(word_cloud, interpolation="bilinear")
-
 
 def tagcloud():
     urduletters = "آ أ ا ب پ ت ٹ ث  ج چ ح خ  د ڈ ذ ر ڑ ز ژ  س ش ص ض ط ظ ع غ  ف ق ک گ ل م  ن ں و ؤ ہ ۂ ۃ  ھ ء ی ئ ے ۓ ".split()
