@@ -32,7 +32,7 @@ def readfromDB():
     return df
 
 
-def preprocess(word):
+def preprocess_line(word):
 #   word = re.sub("\W", " ",word)
 #   word = re.sub("[a-zA-Z0-9]","",word)
 #   word = normalize_characters(word)

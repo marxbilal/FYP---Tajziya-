@@ -3,9 +3,7 @@ from preprocess import *
 from tagcloud import * 
 import sys
 import os
-from API.python.preprocess import preprocess
-from preprocess import preprocessFile
-from sklearn.cluster import KMeans
+#from sklearn.cluster import KMeans
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import normalize 
@@ -34,7 +32,7 @@ def tfidf(data):
     tf_idf_norm = normalize(tf_idf)
 
     tf_idf_array = tf_idf_norm.toarray()
-    terms = tf_idf_vectorizer.get_feature_names()
+    terms = tf_idf_vectorizer.get_feature_names_out()
 
     return [tf_idf_array,terms]
 
@@ -61,23 +59,28 @@ def five_tweets_from_clusters(clusters):
             print(clusters[i][j]+'\n')
             
 
-def get_text_of_each_cluster(df, k, labels):
+def get_text_of_each_cluster(raw_df, clean_df, k, labels):
     unprocessed_clusters = []
     preprocessed_clusters = []
     for i in range(k):
         unprocessed_clusters.append([])
         preprocessed_clusters.append([])
     
-    for i,row in df.iterrows():
+    for i,row in raw_df.iterrows():
         unprocessed_clusters[labels[i]].append(row['tweets'])
-        preprocessed_clusters[labels[i]].append(preprocess.preprocess(row['tweets']))
+    
+    i = 0
+    for i,row in clean_df.iterrows():
+        preprocessed_clusters[labels[i]].append(row['tweets'])
     
     return [unprocessed_clusters, preprocessed_clusters]
 
 
-def wordcloud_for_cluster(clusters_clean_text, cluster_index):
-    generate_word_cloud(clusters_clean_text[cluster_index])
 
+def wordcloud_for_cluster(clusters_clean_text, cluster_index):
+    tweets_text = " ".join(tweet for tweet in clusters_clean_text[cluster_index])
+    #generate_word_cloud(clusters_clean_text[cluster_index])
+    generate_word_cloud(tweets_text)
 
 def cluster(k, tf_idf_array,terms):
     
@@ -124,29 +127,32 @@ def transformToDataset(raw):
 if __name__ == "__main__":
     try:
         if(sys.argv[1] == "file"):
-            data = pd.read_csv('./data/file_tweets.csv', encoding='utf-8', on_bad_lines='skip')
-            os.remove('./data/file_tweets.csv')
-            data = preprocessFile(data)
+            unclean_data = pd.read_csv('./data/file_tweets.csv', encoding='utf-8', on_bad_lines='skip')
+            #os.remove('./data/file_tweets.csv')
+            clean_data = preprocess_df(unclean_data)
         else:
-            data = pd.read_csv('./data/preprocessed_default.csv', encoding='utf-8', on_bad_lines='skip')
+            unclean_data =  pd.read_csv('./data/tweets.csv', encoding='utf-8', on_bad_lines='skip')
         
-        tf_idf_array,terms = tfidf(data)
+            clean_data = pd.read_csv('./data/preprocessed_default.csv', encoding='utf-8', on_bad_lines='skip')
+        
+        tf_idf_array,terms = tfidf(clean_data)
         
         # returns the index with best silhouette score 
         k = silhouetteScore(tf_idf_array,15)    
-        
+
         labels, cluster = cluster(k, tf_idf_array, terms)
 
         transformedCluster = transformToDataset(cluster)
         # print(transformedCluster)
         c = json.dumps(transformedCluster)
 
-        raw_cluster_text, clean_cluster_text =  get_text_of_each_cluster(data, k, labels)
+        unclean_cluster_tweets, clean_cluster_tweets =  get_text_of_each_cluster(unclean_data, clean_data, k, labels)
 
-        
+        wordcloud_for_cluster(clean_cluster_tweets, 0)
+        c = json.dumps("success")
     
     except Exception as e:
-        c = json.dumps({'error': "Python Exception" + str(e)})
+        c = json.dumps({'error': "Python Exception " + str(e)})
     print(c)
 
     

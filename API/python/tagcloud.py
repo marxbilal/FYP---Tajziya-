@@ -19,7 +19,8 @@ def generate_word_cloud(text):
     word_cloud = WordCloud(collocations = False, background_color = 'white', 
                            scale=5,
                            max_font_size=70,
-                           font_path='NotoNaskhArabic-Regular.ttf').generate(text)
+                           #font_path='NotoNaskhArabic-Regular.ttf'
+                           ).generate(text)
     plt.axis("off")
     plt.imshow(word_cloud, interpolation="bilinear")
 
@@ -45,10 +46,11 @@ def tagcloud():
 
 if __name__ == "__main__":
     try:
+        text = "میں ٹھیک ہوں، شکریہ! اور آپ؟"
         generate_word_cloud(text)
         print(True)
     except Exception as e:
-        print(False)
+        print(False, e)
 
     
     
