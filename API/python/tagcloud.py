@@ -22,13 +22,15 @@ def tagcloud():
 
     text = reshaper.reshape(tweets_text)
     text = get_display(text)
+    
 
     # width=1200, height=600,
     word_cloud = WordCloud(collocations=False,  background_color='white', stopwords=urduletters,
                            scale=5,
                            #    min_font_size=10,
                            max_font_size=70,
-                           font_path='./python/NotoNaskhArabic-Regular.ttf').generate(text)
+                           font_path='./python/NotoNaskhArabic-Regular.ttf').process_text(text)
+    print(word_cloud)
     word_cloud.to_file("./data/tagcloud.png")
     plt.axis("off")
     # plt.imshow(word_cloud, interpolation="bilinear")
@@ -40,7 +42,7 @@ if __name__ == "__main__":
         tagcloud()
         print(True)
     except Exception as e:
-        print(False)
+        print(e)
 
     
     
