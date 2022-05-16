@@ -2,7 +2,7 @@ import { spawn } from "child_process";
 
 const pythonScript = async (file) => {
     let largeDataset = [];
-    let path = file ? ["./python/cluster.py", "file"] : ["./python/cluster.py", "nofile"];
+    let path = file ? ["./python/cluster.py", "file", ""] : ["./python/cluster.py", "nofile"];
     const python = spawn("python", path);
 
     python.stdout.on("data", function (data) {
