@@ -15,7 +15,7 @@ const HomePage = () => {
             <Header></Header>
 
             <Tab setSelectedTab={setSelectedTab}></Tab>
-            <div className="flex-grow-1 overflow-hidden">
+            <div className={selectedTab == "media" ? "flex-grow-1 overflow-hidden" : "flex-grow-1 overflow-auto"}>
                 <TagCloudPage display={selectedTab === "tagcloud"}></TagCloudPage>
                 <Cluster display={selectedTab === "cluster"}></Cluster>
                 <Help display={selectedTab === "help"}></Help>

@@ -2,7 +2,7 @@ import axios from "axios";
 import { Bubble } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { useEffect, useState } from "react";
-import { Button, Container, Col, Row, ListGroup, Accordion } from "react-bootstrap";
+import { Button, Container, Col, Row, ListGroup, Accordion, Placeholder, Card } from "react-bootstrap";
 import styles from "./cluster.module.css";
 Chart.register(...registerables);
 
@@ -102,32 +102,63 @@ const Clustering = (props) => {
         return AccordianList;
     };
 
-    // const options = {
-    //     scales: {
-    //         display: false,
-    //         showLabelBackdrop: false,
-    //     },
-    // };
+    const LeftMenu = () => {
+        const content =
+            keywords.length == 0 ? (
+                <div>
+                    <Card>
+                        <Card.Body>
+                            <Placeholder as="p" animation="glow" className="my-1">
+                                <Placeholder xs={8} /> <Placeholder xs={2} />
+                                <Button disabled className="accordion-button collapsed p-0 m-0 ms-3 w-auto bg-white d-inline-flex"></Button>
+                            </Placeholder>
+                        </Card.Body>
+                    </Card>
+                    <Card className="my-1">
+                        <Card.Body>
+                            <Placeholder as="p" animation="glow" className="my-1">
+                                <Placeholder xs={8} /> <Placeholder xs={2} />
+                                <Button disabled className="accordion-button collapsed p-0 m-0 ms-3 w-auto bg-white d-inline-flex"></Button>
+                            </Placeholder>
+                        </Card.Body>
+                    </Card>
+                    <Card className="my-1">
+                        <Card.Body>
+                            <Placeholder as="p" animation="glow" className="my-1">
+                                <Placeholder xs={8} /> <Placeholder xs={2} />
+                                <Button disabled className="accordion-button collapsed p-0 m-0 ms-3 w-auto bg-white d-inline-flex"></Button>
+                            </Placeholder>
+                        </Card.Body>
+                    </Card>
+                </div>
+            ) : (
+                <Accordion alwaysOpen>
+                    <Labels></Labels>
+                </Accordion>
+            );
+        return content;
+    };
+
+    const options = {
+        responsive: true,
+    };
 
     return (
-        <div className={props.display ? "" : " d-none"}>
-            <Container fluid>
-                <Row>
+        <div className={props.display ? "h-100" : "h-100 d-none"}>
+            <Container fluid className="h-100">
+                <Row className="h-100">
                     <Col md={2}>
-                        <Accordion>
-                            <Labels></Labels>
-                        </Accordion>
+                        <LeftMenu></LeftMenu>
                     </Col>
-                    {/*  */}
-                    <Col md={10}>
-                        <div className="">
+                    <Col md={10} className="overflow-auto">
+                        <div className="h-100 ">
                             <h2>Upload file</h2>
                             <input type="file" onChange={onFileChange} />
                             <button onClick={onFileUpload}>Upload!</button>
                             <Button onClick={() => setLive(true)} variant={live ? "success" : "outline-success"} disabled={live ? true : false}>
                                 Default
                             </Button>
-                            <Bubble data={{ datasets: clusterData }} />
+                            <Bubble options={options} data={{ datasets: clusterData }} />
                         </div>
                     </Col>
                 </Row>
