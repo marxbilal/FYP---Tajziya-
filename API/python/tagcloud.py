@@ -7,6 +7,7 @@ import pandas as pd
 data = pd.read_csv('./data/preprocessed_default.csv',
                    encoding='utf-8', on_bad_lines='skip')
 
+
 def generate_word_cloud(text):
     configuration = {
         "language": "Urdu"
@@ -16,10 +17,10 @@ def generate_word_cloud(text):
     text = reshaper.reshape(text)
     text = get_display(text)
 
-    word_cloud = WordCloud(collocations = False, background_color = 'white', 
+    word_cloud = WordCloud(collocations=False, background_color='white',
                            scale=5,
                            max_font_size=70,
-                           #font_path='NotoNaskhArabic-Regular.ttf'
+                           # font_path='NotoNaskhArabic-Regular.ttf'
                            ).generate(text)
     plt.axis("off")
     plt.imshow(word_cloud, interpolation="bilinear")
@@ -51,6 +52,3 @@ if __name__ == "__main__":
         print(True)
     except Exception as e:
         print(False, e)
-
-    
-    

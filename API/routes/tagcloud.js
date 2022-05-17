@@ -6,6 +6,7 @@ const router = express.Router();
 
 const pythonScript = async () => {
     let success = false;
+    let largeDataset = [];
     let path = ["./python/tagcloud.py"];
     const python = spawn("python", path);
 
@@ -20,7 +21,14 @@ const pythonScript = async () => {
         });
 
         python.on("close", (code) => {
-            resolve(success);
+            if (largeDataset.error) {
+                largeDataset = { error: "Error in file" };
+            } else {
+                largeDataset = largeDataset.join("");
+                largeDataset = JSON.parse(largeDataset);
+            }
+
+            resolve(largeDataset);
         });
     });
 };

@@ -81,8 +81,6 @@ def get_text_of_each_cluster(raw_df, clean_df, k, labels):
 def media_cluster(unclean_cluster_tweets):
     list = []
 
-
-<< << << < Updated upstream
     for i in range(len(unclean_cluster_tweets)):
         for tweet in unclean_cluster_tweets[i]:
             dict = {
@@ -94,9 +92,6 @@ def media_cluster(unclean_cluster_tweets):
     return list
 
 
-<< << << < Updated upstream
-
-
 def wordcloud_for_cluster(clusters_clean_text, cluster_index):
     tweets_text = " ".join(
         tweet for tweet in clusters_clean_text[cluster_index])
@@ -105,26 +100,6 @@ def wordcloud_for_cluster(clusters_clean_text, cluster_index):
 
 
 def cluster(k, tf_idf_array, terms):
-
-
-== == == =
-    return [tf_idf_array, terms]
-
-
-def cluster(k, data):
-    tf_idf_array, terms = tfidf(data)
-
-
->>>>>> > Stashed changes
-== == == =
-    return [tf_idf_array, terms]
-
-
-def cluster(k, data):
-    tf_idf_array, terms = tfidf(data)
-
-
->>>>>> > Stashed changes
 
     sklearn_pca = PCA(n_components=2)
     Y_sklearn = sklearn_pca.fit_transform(tf_idf_array)
@@ -168,13 +143,13 @@ def transformToDataset(raw):
 
 if __name__ == "__main__":
     try:
+        user_input_file = False
         if(sys.argv[1] == "file"):
-<< << << < Updated upstream
-<< << << < Updated upstream
+            user_input_file = True
             unclean_data = pd.read_csv(
                 './data/file_tweets.csv', encoding='utf-8', on_bad_lines='skip')
             # os.remove('./data/file_tweets.csv')
-            clean_data = preprocess_df(unclean_data)
+            clean_data = preprocessFile(unclean_data)
         else:
             unclean_data = pd.read_csv(
                 './data/tweets.csv', encoding='utf-8', on_bad_lines='skip')
@@ -183,27 +158,11 @@ if __name__ == "__main__":
                 './data/preprocessed_default.csv', encoding='utf-8', on_bad_lines='skip')
 
         tf_idf_array, terms = tfidf(clean_data)
-
         # returns the index with best silhouette score
         k = silhouetteScore(tf_idf_array, 15)
 
         labels, cluster = cluster(k, tf_idf_array, terms)
 
-=======
-=======
->>>>>>> Stashed changes
-            data = pd.read_csv('./data/file_tweets.csv',
-                               encoding='utf-8', on_bad_lines='skip')
-            os.remove('./data/file_tweets.csv')
-            data = preprocessFile(data)
-        else:
-            data = pd.read_csv('./data/preprocessed_default.csv',
-                               encoding='utf-8', on_bad_lines='skip')
-        cluster = cluster(3, data)
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
         transformedCluster = transformToDataset(cluster)
         # print(transformedCluster)
         c = json.dumps(transformedCluster)
@@ -214,7 +173,7 @@ if __name__ == "__main__":
         media_output = media_cluster(unclean_cluster_tweets)
 
         wordcloud_for_cluster(clean_cluster_tweets, 0)
-        c = json.dumps("success")
+        # c = json.dumps("success")
 
     except Exception as e:
         c = json.dumps({'error': "Python Exception " + str(e)})

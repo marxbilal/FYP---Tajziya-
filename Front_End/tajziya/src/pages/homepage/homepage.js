@@ -21,8 +21,8 @@ const HomePage = () => {
                 <Help display={selectedTab === "help"}></Help>
                 <Media display={selectedTab === "media"}></Media>
             </div>
-        );
-    }
-}
+        </Stack>
+    );
+};
 
-export default Homepage;
+export default HomePage;

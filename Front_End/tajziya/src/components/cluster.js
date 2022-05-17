@@ -3,7 +3,6 @@ import { Bubble } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { useEffect, useState } from "react";
 import { Button, Container, Col, Row, ListGroup, Accordion, Placeholder, Card, Spinner, Form } from "react-bootstrap";
-import styles from "./cluster.module.css";
 Chart.register(...registerables);
 
 const Clustering = (props) => {
@@ -106,7 +105,7 @@ const Clustering = (props) => {
 
     const LeftMenu = () => {
         const content =
-            keywords.length == 0 ? (
+            keywords.length === 0 ? (
                 <div>
                     <Card>
                         <Card.Body>

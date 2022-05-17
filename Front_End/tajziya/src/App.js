@@ -1,18 +1,12 @@
 //import Footer from "./components/footer";
 
 import React from "react";
-import TagCloud from "./pages/tagcloud/tag";
-//import Homepage from "./pages/homepage/homepage";
-//import FileUpload from "./pages/Fileupload/FileUpload";
-
-//import Header from "./components/header";
-//import Signnup from "./components/signo";
-
-//import Clustering from "./pages/clustering/cluster";
-import Search from "./components/search";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Homepage from "./pages/homepage/homepage";
 
 function App() {
-    return <Search />;
+    return <Homepage />;
 }
 
 export default App;
