@@ -3,7 +3,7 @@ from preprocess import *
 from tagcloud import *
 import sys
 import os
-#from sklearn.cluster import KMeans
+# from sklearn.cluster import KMeans
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import normalize
@@ -81,7 +81,8 @@ def get_text_of_each_cluster(raw_df, clean_df, k, labels):
 def media_cluster(unclean_cluster_tweets):
     list = []
 
-<<<<<<< Updated upstream
+
+<< << << < Updated upstream
     for i in range(len(unclean_cluster_tweets)):
         for tweet in unclean_cluster_tweets[i]:
             dict = {
@@ -93,6 +94,9 @@ def media_cluster(unclean_cluster_tweets):
     return list
 
 
+<< << << < Updated upstream
+
+
 def wordcloud_for_cluster(clusters_clean_text, cluster_index):
     tweets_text = " ".join(
         tweet for tweet in clusters_clean_text[cluster_index])
@@ -101,13 +105,26 @@ def wordcloud_for_cluster(clusters_clean_text, cluster_index):
 
 
 def cluster(k, tf_idf_array, terms):
-=======
+
+
+== == == =
     return [tf_idf_array, terms]
 
 
 def cluster(k, data):
     tf_idf_array, terms = tfidf(data)
->>>>>>> Stashed changes
+
+
+>>>>>> > Stashed changes
+== == == =
+    return [tf_idf_array, terms]
+
+
+def cluster(k, data):
+    tf_idf_array, terms = tfidf(data)
+
+
+>>>>>> > Stashed changes
 
     sklearn_pca = PCA(n_components=2)
     Y_sklearn = sklearn_pca.fit_transform(tf_idf_array)
@@ -123,7 +140,6 @@ def cluster(k, data):
     cluster = [Y_sklearn, labels, keywords]
 
     return [labels, cluster]
-
 
 
 def transformToDataset(raw):
@@ -153,7 +169,8 @@ def transformToDataset(raw):
 if __name__ == "__main__":
     try:
         if(sys.argv[1] == "file"):
-<<<<<<< Updated upstream
+<< << << < Updated upstream
+<< << << < Updated upstream
             unclean_data = pd.read_csv(
                 './data/file_tweets.csv', encoding='utf-8', on_bad_lines='skip')
             # os.remove('./data/file_tweets.csv')
@@ -173,6 +190,8 @@ if __name__ == "__main__":
         labels, cluster = cluster(k, tf_idf_array, terms)
 
 =======
+=======
+>>>>>>> Stashed changes
             data = pd.read_csv('./data/file_tweets.csv',
                                encoding='utf-8', on_bad_lines='skip')
             os.remove('./data/file_tweets.csv')
@@ -181,6 +200,9 @@ if __name__ == "__main__":
             data = pd.read_csv('./data/preprocessed_default.csv',
                                encoding='utf-8', on_bad_lines='skip')
         cluster = cluster(3, data)
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         transformedCluster = transformToDataset(cluster)
         # print(transformedCluster)
