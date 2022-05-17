@@ -69,7 +69,7 @@ def preprocess_df(original_df):
 
     preprocessed_tweets =[]
     for tweet in unprocessed_tweets:
-        preprocessed_tweets.append(preprocess(tweet))
+        preprocessed_tweets.append(preprocess_line(tweet))
 
     preprocessed_df = pd.DataFrame(preprocessed_tweets,columns = ["tweets"])
     preprocessed_df['timestamp'] = pd.to_datetime(original_df['timestamp'], format='%a %b %d %H:%M:%S +0000 %Y')

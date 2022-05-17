@@ -75,7 +75,13 @@ def get_text_of_each_cluster(raw_df, clean_df, k, labels):
     
     return [unprocessed_clusters, preprocessed_clusters]
 
-
+def media_cluster(unclean_cluster_tweets):
+    list = []
+    
+    for i in len(unclean_cluster_tweets):
+        for tweet in unclean_cluster_tweets[i]:
+            m1 = "{\n\t" + "\"label\":\"Cluster "+ str(i)+"\"\n\t" + "\"tweet\":\""+ str(tweet)+"\"\n\t" + "\"type\": \"Tweet\"\n}"
+            list.append(m1) 
 
 def wordcloud_for_cluster(clusters_clean_text, cluster_index):
     tweets_text = " ".join(tweet for tweet in clusters_clean_text[cluster_index])
@@ -147,6 +153,9 @@ if __name__ == "__main__":
         c = json.dumps(transformedCluster)
 
         unclean_cluster_tweets, clean_cluster_tweets =  get_text_of_each_cluster(unclean_data, clean_data, k, labels)
+
+
+        
 
         wordcloud_for_cluster(clean_cluster_tweets, 0)
         c = json.dumps("success")
