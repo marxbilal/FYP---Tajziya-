@@ -1,59 +1,25 @@
-import React, { Component } from "react";
-import axios from "axios";
-import "./homepage.css";
-//import Header from "../../components/header";
-//import Footer from "../../components/footer";
+import { useState } from "react";
+import { Stack } from "react-bootstrap";
+import Cluster from "../../components/cluster";
+import Header from "../../components/header";
+import Tab from "../../components/tab";
+import TagCloudPage from "../../components/tagcloud";
+import Help from "../../components/help";
+import Media from "../../components/media";
 
-class Homepage extends Component {
-    state = {
-        selectedFile: null,
-    };
+const HomePage = () => {
+    const [selectedTab, setSelectedTab] = useState("cluster");
 
-    onFileChange = (event) => {
-        this.setState({ selectedFile: event.target.files[0] });
-    };
+    return (
+        <Stack className="h-100">
+            <Header></Header>
 
-    onFileUpload = () => {
-        const formData = new FormData();
-
-        formData.append("myFile", this.state.selectedFile, this.state.selectedFile.name);
-        console.log(this.state.selectedFile);
-
-        axios.post("api/uploadfile", formData);
-    };
-
-    fileData = () => {
-        if (this.state.selectedFile) {
-            return (
-                <div style={{ textAlign: "right", width: "100px" }}>
-                    <h2>File Details:</h2>
-
-                    <p>File Name: {this.state.selectedFile.name}</p>
-
-                    <p>File Type: {this.state.selectedFile.type}</p>
-
-                    <p>Last Modified: {this.state.selectedFile.lastModifiedDate.toDateString()}</p>
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    <br />
-                    <h4>Choose before Pressing the Upload button</h4>
-                </div>
-            );
-        }
-    };
-
-    render() {
-        return (
-            <div style={{ textAlign: "right" }}>
-                <h2>Upload file for Clustering</h2>
-                <div>
-                    <input type="file" onChange={this.onFileChange} />
-                    <button onClick={this.onFileUpload}> Upload</button>
-                </div>
-                {this.fileData()}
+            <Tab setSelectedTab={setSelectedTab}></Tab>
+            <div className={selectedTab === "media" ? "flex-grow-1 overflow-hidden" : "flex-grow-1 overflow-auto"}>
+                <TagCloudPage display={selectedTab === "tagcloud"}></TagCloudPage>
+                <Cluster display={selectedTab === "cluster"}></Cluster>
+                <Help display={selectedTab === "help"}></Help>
+                <Media display={selectedTab === "media"}></Media>
             </div>
         );
     }
