@@ -1,114 +1,81 @@
-import { CacheProvider } from "@emotion/react";
-import { useState } from "react";
-import { Button, Card, Col, Container, ListGroup, Placeholder, Row } from "react-bootstrap";
+import axios from "axios";
+import { useEffect, useRef, useState } from "react";
+import { Button, Card, Col, Container, ListGroup, Placeholder, Row, Tab } from "react-bootstrap";
+import "./leftmenu.css";
 
 const Media = (props) => {
     const [expand, setExpand] = useState(false);
-    const [clusterLabels, setClusterLabels] = useState([]);
+    const [data, setData] = useState([]);
+    const [type, setType] = useState("live");
+    // const [toggle, setToggle] = useState("#0&");
+
+    useEffect(() => {
+        if (props.fetchData) {
+            axios
+                .get("http://localhost:8000/media", {})
+                .then((res) => {
+                    setData(res.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } else {
+            setData([]);
+        }
+    }, [props.fetchData]);
 
     const ClusterNames = () => {
-        // let ListItem = [];
-        // for (let i = 0; i < clusterLabels.length; i++) {
-        //     ListItem.append(<ListGroup.Item style={{ color: clusterLabels[i].color }}>{clusterLabels[i].label}</ListGroup.Item>);
-        // }
-        // return ListItem;
+        let ListItem = [];
+        for (let i = 0; i < data.length; i++) {
+            ListItem.push(
+                <ListGroup.Item action href={"#" + i + "&"} key={i + "labelmediakey"} style={{ color: "red" }}>
+                    {data[i][0].label}
+                </ListGroup.Item>
+            );
+        }
+        return ListItem;
     };
 
     const Content = () => {
-        return (
-            <ListGroup className=" overflow-auto h-100">
-                <ListGroup.Item>
-                    <Container className="py-2">
-                        <Row>
-                            <Col md={11}>
-                                <h2>Headline</h2>
-                            </Col>
-                            <Col md={1} className="d-flex align-items-center">
-                                <strong className="font-weight-bolder m-0">Type</strong>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <p className="text-justify">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam varius turpis nec eros rutrum scelerisque. Curabitur
-                                volutpat, sem in pellentesque ornare, dolor tellus feugiat nunc, eget convallis tellus arcu ac sem. Pellentesque a leo
-                                efficitur massa scelerisque venenatis. Praesent aliquet ligula eget ligula ultrices, in tincidunt nulla condimentum.
-                                Vivamus molestie elit ac erat ornare, vel tincidunt urna ullamcorper. Proin pharetra nunc id neque tincidunt sagittis.
-                                Duis aliquam sollicitudin sapien eget elementum. Mauris ullamcorper dictum porta.<a href="#" onClick={() => {}}></a>
-                                {}
-                            </p>
-                        </Row>
-                    </Container>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                    <Container className="py-2">
-                        <Row>
-                            <Col md={11}>
-                                <h2>Headline</h2>
-                            </Col>
-                            <Col md={1} className="d-flex align-items-center">
-                                <strong className="font-weight-bolder m-0">Type</strong>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <p className="text-justify">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam varius turpis nec eros rutrum scelerisque. Curabitur
-                                volutpat, sem in pellentesque ornare, dolor tellus feugiat nunc, eget convallis tellus arcu ac sem. Pellentesque a leo
-                                efficitur massa scelerisque venenatis. Praesent aliquet ligula eget ligula ultrices, in tincidunt nulla condimentum.
-                                Vivamus molestie elit ac erat ornare, vel tincidunt urna ullamcorper. Proin pharetra nunc id neque tincidunt sagittis.
-                                Duis aliquam sollicitudin sapien eget elementum. Mauris ullamcorper dictum porta.
-                            </p>
-                        </Row>
-                    </Container>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                    <Container className="py-2">
-                        <Row>
-                            <Col md={11}>
-                                <h2>Headline</h2>
-                            </Col>
-                            <Col md={1} className="d-flex align-items-center">
-                                <strong className="font-weight-bolder m-0">Type</strong>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <p className="text-justify">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam varius turpis nec eros rutrum scelerisque. Curabitur
-                                volutpat, sem in pellentesque ornare, dolor tellus feugiat nunc, eget convallis tellus arcu ac sem. Pellentesque a leo
-                                efficitur massa scelerisque venenatis. Praesent aliquet ligula eget ligula ultrices, in tincidunt nulla condimentum.
-                                Vivamus molestie elit ac erat ornare, vel tincidunt urna ullamcorper. Proin pharetra nunc id neque tincidunt sagittis.
-                                Duis aliquam sollicitudin sapien eget elementum. Mauris ullamcorper dictum porta.
-                            </p>
-                        </Row>
-                    </Container>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                    <Container className="py-2">
-                        <Row>
-                            <Col md={11}>
-                                <h2>Headline</h2>
-                            </Col>
-                            <Col md={1} className="d-flex align-items-center">
-                                <strong className="font-weight-bolder m-0">Type</strong>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <p className="text-justify">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam varius turpis nec eros rutrum scelerisque. Curabitur
-                                volutpat, sem in pellentesque ornare, dolor tellus feugiat nunc, eget convallis tellus arcu ac sem. Pellentesque a leo
-                                efficitur massa scelerisque venenatis. Praesent aliquet ligula eget ligula ultrices, in tincidunt nulla condimentum.
-                                Vivamus molestie elit ac erat ornare, vel tincidunt urna ullamcorper. Proin pharetra nunc id neque tincidunt sagittis.
-                                Duis aliquam sollicitudin sapien eget elementum. Mauris ullamcorper dictum porta.
-                            </p>
-                        </Row>
-                    </Container>
-                </ListGroup.Item>
-            </ListGroup>
-        );
+        let ListItem = [];
+        let ListContent = [];
+        for (let i = 0; i < data.length; i++) {
+            ListItem = [];
+            for (let j = 0; j < data[i].length; j++) {
+                ListItem.push(
+                    <ListGroup.Item key={"media" + i + "&" + j + 5}>
+                        <Container>
+                            <Row>
+                                <Col md={11}>
+                                    <h2>{data[i][j].Tweet.split(" ").slice(0, 2).join(" ")}</h2>
+                                </Col>
+                                <Col md={1} className="d-flex align-items-center">
+                                    <strong className="font-weight-bolder m-0">{data[i][j].Type}</strong>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <p className="text-justify">
+                                    {data[i][j].Tweet}
+                                    <a href="#" onClick={() => {}}></a>
+                                    {}
+                                </p>
+                            </Row>
+                        </Container>
+                    </ListGroup.Item>
+                );
+            }
+            ListContent.push([
+                <Tab.Pane eventKey={"#" + i + "&"}>
+                    <ListGroup>{ListItem}</ListGroup>
+                </Tab.Pane>,
+            ]);
+        }
+        return ListContent;
     };
 
     const Body = () => {
         const content =
-            clusterLabels.length === 0 ? (
+            data.length === 0 ? (
                 <div>
                     <Card>
                         <Card.Body>
@@ -148,14 +115,16 @@ const Media = (props) => {
                     </Card>
                 </div>
             ) : (
-                <Content></Content>
+                <Tab.Content className="overflow-auto h-100">
+                    <Content></Content>
+                </Tab.Content>
             );
         return content;
     };
 
     const LeftMenu = () => {
         const content =
-            clusterLabels.length === 0 ? (
+            data.length === 0 ? (
                 <div>
                     <Card>
                         <Card.Body>
@@ -180,7 +149,7 @@ const Media = (props) => {
                     </Card>
                 </div>
             ) : (
-                <ListGroup>
+                <ListGroup defaultActiveKey={"#" + 0 + "&"}>
                     <ClusterNames></ClusterNames>
                 </ListGroup>
             );
@@ -189,16 +158,16 @@ const Media = (props) => {
 
     return (
         <div className={props.display ? " h-100" : "h-100 d-none"}>
-            <Container fluid className="h-100">
+            <Tab.Container id="media" defaultActiveKey="#0&" fluid className="h-100">
                 <Row className="h-100">
-                    <Col md={2}>
+                    <Col md={2} className="ms-2">
                         <LeftMenu></LeftMenu>
                     </Col>
-                    <Col md={10} className=" h-100">
+                    <Col md={9} className=" h-100">
                         <Body></Body>
                     </Col>
                 </Row>
-            </Container>
+            </Tab.Container>
         </div>
     );
 };

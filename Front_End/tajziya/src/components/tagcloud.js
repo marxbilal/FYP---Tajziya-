@@ -1,31 +1,43 @@
+import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Card, Col, Container, Image, ListGroup, Placeholder, Row, Spinner } from "react-bootstrap";
 import ReactWordcloud from "react-wordcloud";
 import words from "./words";
 
 const TagCloudPage = (props) => {
-    const [clusterLabels, setClusterLabels] = useState([]);
-    const [objectURL, setUrl] = useState();
+    const [data, setData] = useState([]);
+    const [cluster, setCluster] = useState(0);
 
-    // useEffect(() => {
-    //     fetch("http://localhost:8000/tagcloud")
-    //         .then((res) => res.blob())
-    //         .then(function (myBlob) {
-    //             setUrl(URL.createObjectURL(myBlob));
-    //         });
-    // }, []);
+    useEffect(() => {
+        if (props.fetchData) {
+            axios
+                .get("http://localhost:8000/tagcloud", {})
+                .then((res) => {
+                    setData(res.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } else {
+            setData([]);
+        }
+    }, [props.fetchData]);
 
     const ClusterNames = () => {
         let ListItem = [];
-        for (let i = 0; i < clusterLabels.length; i++) {
-            ListItem.append(<ListGroup.Item style={{ color: clusterLabels[i].color }}>{clusterLabels[i].label}</ListGroup.Item>);
+        for (let i = 0; i < data.length; i++) {
+            ListItem.push(
+                <ListGroup.Item action href={"#" + i + "&"} key={i + "labelmediakey"} style={{ color: "red" }}>
+                    {data[i].label}
+                </ListGroup.Item>
+            );
         }
         return ListItem;
     };
 
     const LeftMenu = () => {
         const content =
-            clusterLabels.length === 0 ? (
+            data.length === 0 ? (
                 <div>
                     <Card>
                         <Card.Body>
@@ -50,7 +62,12 @@ const TagCloudPage = (props) => {
                     </Card>
                 </div>
             ) : (
-                <ListGroup>
+                <ListGroup
+                    defaultActiveKey={"#" + 0 + "&"}
+                    onSelect={(key) => {
+                        setCluster(0);
+                    }}
+                >
                     <ClusterNames></ClusterNames>
                 </ListGroup>
             );
@@ -59,7 +76,7 @@ const TagCloudPage = (props) => {
 
     const Body = () => {
         const content =
-            clusterLabels.length === 0 ? (
+            data.length === 0 ? (
                 <div className="h-100 d-flex align-items-center justify-content-center">
                     <Spinner animation="border" style={{ width: "20rem", height: "20rem", borderWidth: "1rem" }} />
                 </div>
@@ -78,7 +95,7 @@ const TagCloudPage = (props) => {
                         scale: "sqrt",
                         spiral: "archimedean",
                     }}
-                    words={words}
+                    words={data ? data[cluster].data : []}
                 ></ReactWordcloud>
             );
         return content;

@@ -1,7 +1,4 @@
 from wordcloud import WordCloud
-from bidi.algorithm import get_display
-from arabic_reshaper import ArabicReshaper
-import matplotlib.pyplot as plt
 import pandas as pd
 import sys
 import json
@@ -11,7 +8,7 @@ def json_for_single_wordcloud_dict(wordcloud_dict):
     for key in wordcloud_dict:
         wordcloud_dict.get(key)
         dict = {
-            "word" : key[::-1],
+            "text" : key[::-1],
             "value" : wordcloud_dict.get(key),
         }
         list.append(dict) 

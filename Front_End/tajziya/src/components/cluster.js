@@ -17,6 +17,7 @@ const Clustering = (props) => {
     };
 
     const onFileUpload = () => {
+        props.setFetchData(false);
         const formData = new FormData();
         if (file.selectedFile == null) alert("No file Selected");
         else {
@@ -30,8 +31,7 @@ const Clustering = (props) => {
                     setClusterData(res.data.data);
                     setKeywords(res.data.keywords);
                     setLive(false);
-
-                    console.log(res.data);
+                    props.setFetchData(true);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -65,6 +65,7 @@ const Clustering = (props) => {
             .then((res) => {
                 setClusterData(res.data.data);
                 setKeywords(res.data.keywords);
+                props.setFetchData(true);
             })
             .catch((error) => {
                 console.log(error);
@@ -183,6 +184,7 @@ const Clustering = (props) => {
                                         setLiveFetch(true);
                                         setClusterData([]);
                                         setKeywords([]);
+                                        props.setFetchData(false);
                                     }}
                                     variant={live ? "success" : "outline-success"}
                                     disabled={live ? true : false}
