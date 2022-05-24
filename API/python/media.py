@@ -1,5 +1,7 @@
 import pandas as pd
 import sys
+import json
+
 def media_cluster_json(df):
     list = []
     for label in range(df['cluster'].max()+1):
@@ -16,11 +18,16 @@ def media_cluster_json(df):
     return list
 
 if __name__ == "__main__":
-    if(sys.argv[1] == "file"):
-        df = pd.read_csv('./data/file_unclean_data.csv', encoding='utf-8', on_bad_lines='skip')
-    elif(sys.argv[1] == "search"):
-        df = pd.read_csv('./data/search_unclean_data.csv', encoding='utf-8', on_bad_lines='skip')
-    else:
-        df = pd.read_csv('./data/live_unclean_data.csv', encoding='utf-8', on_bad_lines='skip')
-    output = media_cluster_json(df)
-    print(output)
+    try:
+        if(sys.argv[1] == "file"):
+            df = pd.read_csv('./data/file_unclean_data.csv', encoding='utf-8', on_bad_lines='skip')
+        elif(sys.argv[1] == "search"):
+            df = pd.read_csv('./data/search_unclean_data.csv', encoding='utf-8', on_bad_lines='skip')
+        else:
+            df = pd.read_csv('./data/live_unclean_data.csv', encoding='utf-8', on_bad_lines='skip')
+        output = media_cluster_json(df)
+        print(json.dumps(output))
+        
+    except Exception as e:
+        c = json.dumps({'error': "Python Exception " + str(e)})
+        print(c)

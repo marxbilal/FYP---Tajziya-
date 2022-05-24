@@ -99,6 +99,7 @@ if __name__ == "__main__":
             clean_data = preprocessFile(unclean_data)
         elif(sys.argv[1] == "search"):
             #something
+            print("Hi")
         else:
             unclean_data = pd.read_csv(
                 './data/tweets.csv', encoding='utf-8', on_bad_lines='skip')

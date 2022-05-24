@@ -4,6 +4,7 @@ from arabic_reshaper import ArabicReshaper
 import matplotlib.pyplot as plt
 import pandas as pd
 import sys
+import json
 
 def json_for_single_wordcloud_dict(wordcloud_dict):
     list = []
@@ -47,6 +48,7 @@ if __name__ == "__main__":
         #wordcloud json for each cluster
         clusterwise_wordcloud_json = wordcloud_dict_to_json(clean_df)
         
-        print(clusterwise_wordcloud_json)
+        print(json.dumps(clusterwise_wordcloud_json))
     except Exception as e:
-        print(False, e)
+        c = json.dumps({'error': "Python Exception " + str(e)})
+        print(c)

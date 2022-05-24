@@ -1,9 +1,8 @@
 import { pythonScript } from "./pythonscript.js";
 
-export const liveCluster = async (req, res) => {
-    // if (req.body.filterCategory == null && req.body.filterTopic == null) {
+export const liveCloud = async (req, res) => {
     try {
-        let largeDataset = await pythonScript("./python/cluster.py", "nofile", "");
+        let largeDataset = await pythonScript("./python/word_cloud.py", "nofile", "");
         res.status(200).json(largeDataset);
     } catch (err) {
         res.status(500).json(err);
@@ -11,9 +10,9 @@ export const liveCluster = async (req, res) => {
     }
 };
 
-export const fileCluster = async (req, res) => {
+export const fileCloud = async (req, res) => {
     try {
-        let largeDataset = await pythonScript("./python/cluster.py", "file", "");
+        let largeDataset = await pythonScript("./python/word_cloud.py", "file", "");
         res.status(200).json(largeDataset);
     } catch (err) {
         res.status(500).json(err);
@@ -21,10 +20,10 @@ export const fileCluster = async (req, res) => {
     }
 };
 
-export const searchCluster = async (req, res) => {
+export const searchCloud = async (req, res) => {
     try {
         let keyword = req.body.keyword;
-        let largeDataset = await pythonScript("./python/cluster.py", "search", keyword);
+        let largeDataset = await pythonScript("./python/word_cloud.py", "search", keyword);
         res.status(200).json(largeDataset);
     } catch (err) {
         res.status(500).json(err);

@@ -7,6 +7,7 @@ import userRoute from "./routes/user.js";
 import clusterRoute from "./routes/cluster.js";
 import adminRoute from "./routes/admin.js";
 import tagcloud from "./routes/tagcloud.js";
+import media from "./routes/media.js";
 import path from "./config/path.js";
 
 const app = express();
@@ -24,6 +25,7 @@ app.use("/user", userRoute);
 app.use("/cluster", clusterRoute);
 app.use("/admin", adminRoute);
 app.use("/tagcloud", tagcloud);
+app.use("/media", media);
 
 mongoose.connect(path.url, { useNewUrlParser: true });
 const db = mongoose.connection;
