@@ -7,6 +7,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import PCA
 import pandas as pd
 import json
+import traceback
 
 
 def topKeywords(model, terms, k, n):
@@ -90,16 +91,23 @@ def transformToDataset(raw):
 
 if __name__ == "__main__":
     try:
-        user_input_file = False
-        if(sys.argv[1] == "file"):
-            user_input_file = True
+        if (len(sys.argv)==1):
             unclean_data = pd.read_csv(
-                './data/file_tweets.csv', encoding='utf-8', on_bad_lines='skip')
+                './data/live_unclean_data.csv', encoding='utf-8', on_bad_lines='skip')
+            clean_data = pd.read_csv(
+                './data/live_unclean_data.csv', encoding='utf-8', on_bad_lines='skip')
+        elif(sys.argv[1] == "file"):
+            unclean_data = pd.read_csv(
+                './data/file_unclean_data.csv', encoding='utf-8', on_bad_lines='skip')
             # os.remove('./data/file_tweets.csv')
-            clean_data = preprocessFile(unclean_data)
+            if 'timestamp' in unclean_data:
+                clean_data = preprocessFile(unclean_data)
+            else:
+                clean_data = preprocessUserFile(unclean_data)
         elif(sys.argv[1] == "search"):
-            #something
-            print("Hi")
+            unclean_data = pd.read_csv(
+                './data/search_unclean_data.csv', encoding='utf-8', on_bad_lines='skip')
+            clean_data = preprocessFile(unclean_data)
         else:
             unclean_data = pd.read_csv(
                 './data/tweets.csv', encoding='utf-8', on_bad_lines='skip')
@@ -116,26 +124,31 @@ if __name__ == "__main__":
         #writing labeled file for media/wordcloud
         if(sys.argv[1] == "file"):
             unclean_data.insert(2, "cluster", labels, True)
+            del unclean_data["Unnamed: 0"]
             unclean_data.to_csv("./data/file_unclean_data.csv")
 
-            clean_data.insert(2, "cluster", labels, True)
+            clean_data.insert(1, "cluster", labels, True)
             clean_data.to_csv("./data/file_clean_data.csv")
         elif(sys.argv[1] == "search"):
             unclean_data.insert(2, "cluster", labels, True)
+            del unclean_data["Unnamed: 0"]
             unclean_data.to_csv("./data/search_unclean_data.csv")
 
-            clean_data.insert(2, "cluster", labels, True)
+            clean_data.insert(1, "cluster", labels, True)
             clean_data.to_csv("./data/search_clean_data.csv")
         else:
             unclean_data.insert(2, "cluster", labels, True)
+            del unclean_data["Unnamed: 0"]
             unclean_data.to_csv("./data/live_unclean_data.csv")
 
-            clean_data.insert(2, "cluster", labels, True)
+            clean_data.insert(1, "cluster", labels, True)
             clean_data.to_csv("./data/live_clean_data.csv")
 
         transformedCluster = transformToDataset(cluster)
         c = json.dumps(transformedCluster)
 
     except Exception as e:
-        c = json.dumps({'error': "Python Exception " + str(e)})
+        traceback_info = traceback.format_exc()
+        # print(traceback_info)
+        c = json.dumps({'error': "Python Exception " + str(traceback_info)})
     print(c)

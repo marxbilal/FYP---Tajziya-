@@ -1,7 +1,7 @@
 import express from "express";
 import multer from "multer";
 
-import { liveCluster, fileCluster } from "../controllers/cluster.js";
+import { liveCluster, fileCluster, searchCluster } from "../controllers/cluster.js";
 
 const router = express.Router();
 
@@ -19,5 +19,7 @@ const upload = multer({ storage });
 router.post("/", liveCluster);
 
 router.post("/file", upload.single("file"), fileCluster);
+
+router.post("/search", searchCluster);
 
 export default router;

@@ -3,9 +3,9 @@ import { liveMedia, fileMedia, searchMedia } from "../controllers/media.js";
 
 const router = express.Router();
 
-router.get("/", liveMedia);
+router.post("/", liveMedia);
 
-router.get("/file", fileMedia);
+router.post("/file", fileMedia);
 
 router.post("/search", searchMedia);
 

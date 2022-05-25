@@ -6,7 +6,7 @@ import sys
 class MyStreamListener(tweepy.Stream):
 
     df = pd.DataFrame(columns=['tweets', 'timestamp'])
-    target = 5000
+    target = 1000
     count = 0
 
     def on_status(self, status):
@@ -14,22 +14,25 @@ class MyStreamListener(tweepy.Stream):
         self.add_to_df(dict)
         if(self.count == self.target):
             
-            self.df.to_csv("./data/live_unclean_data.csv")
+            self.df.to_csv("./data/testingForComplete.csv")
             exit()
         else:
             self.count = self.count + 1
-            print(self.count)
+            # print(self.count)
 
     def on_error(self, status_code):
         print(status_code)
 
     def add_to_df(self, dict):
+        print(dict)
         if(dict['truncated'] == True):
             tweet = pd.DataFrame(
                 {'tweets': dict['extended_tweet']['full_text'], 'timestamp': dict['created_at']}, index=[self.count])
         else:
-            tweet = pd.DataFrame(
-                {'tweets': dict['text'], 'timestamp': dict['created_at']}, index=[self.count])
+            if(dict.get("retweeted_status") and dict["retweeted_status"].get("extended_tweet")):
+                tweet = pd.DataFrame({'tweets': dict['retweeted_status']['extended_tweet']['full_text'], 'timestamp': dict['created_at']}, index=[self.count])
+            else:
+                tweet = pd.DataFrame({'tweets': dict['text'], 'timestamp': dict['created_at']}, index=[self.count])
         self.df = pd.concat([self.df, tweet])
 
 

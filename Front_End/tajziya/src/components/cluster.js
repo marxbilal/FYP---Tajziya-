@@ -10,7 +10,7 @@ const Clustering = (props) => {
     const [keywords, setKeywords] = useState([]);
     const [file, setFile] = useState({ selectedFile: null });
     const [live, setLive] = useState(true);
-    const [liveFetch, setLiveFetch] = useState(true);
+    // const [liveFetch, setLiveFetch] = useState(true);
 
     const onFileChange = (event) => {
         setFile({ selectedFile: event.target.files[0] });
@@ -31,6 +31,7 @@ const Clustering = (props) => {
                     setClusterData(res.data.data);
                     setKeywords(res.data.keywords);
                     setLive(false);
+                    props.setFetchType("file");
                     props.setFetchData(true);
                 })
                 .catch((error) => {
@@ -39,47 +40,35 @@ const Clustering = (props) => {
         }
     };
 
-    const FileData = () => {
-        if (file.selectedFile) {
-            return (
-                <div>
-                    <h3>File Details:</h3>
-                    <p>File Name: {file.selectedFile.name}</p>
-                    <p>Last Modified: {file.selectedFile.lastModifiedDate.toDateString()}</p>
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    <br />
-                    <h4>Choose before Pressing the Upload button</h4>
-                </div>
-            );
-        }
-    };
-
     useEffect(() => {
-        axios
-            .post("http://localhost:8000/cluster", {})
-            .then((res) => {
-                console.log("clusterData");
-                setClusterData(res.data.data);
-                setKeywords(res.data.keywords);
-                let temp = [];
-                console.log(res.data.data.length);
-                for (let i = 0; i < res.data.data.length; i++) {
-                    temp.push({
-                        label: res.data.data[i].label,
-                        color: res.data.data[i].backgroundColor,
-                    });
-                }
-                props.setClusterLabelColor(temp);
-                props.setFetchData(true);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [liveFetch]);
+        if (props.fetchType == "search") {
+            setLive(false);
+            setClusterData([]);
+            setKeywords([]);
+        }
+        if (live == true || props.fetchType == "search") {
+            axios
+                .post("http://localhost:8000/cluster/" + props.fetchType, {})
+                .then((res) => {
+                    console.log("clusterData");
+                    setClusterData(res.data.data);
+                    setKeywords(res.data.keywords);
+                    let temp = [];
+                    console.log(res.data.data.length);
+                    for (let i = 0; i < res.data.data.length; i++) {
+                        temp.push({
+                            label: res.data.data[i].label,
+                            color: res.data.data[i].backgroundColor,
+                        });
+                    }
+                    props.setClusterLabelColor(temp);
+                    props.setFetchData(true);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, [live, props.fetchType]);
 
     const Labels = () => {
         let AccordianList = [];
@@ -164,6 +153,18 @@ const Clustering = (props) => {
     };
 
     const options = {
+        scales: {
+            y: {
+                ticks: {
+                    display: false,
+                },
+            },
+            x: {
+                ticks: {
+                    display: false,
+                },
+            },
+        },
         responsive: true,
     };
 
@@ -191,9 +192,9 @@ const Clustering = (props) => {
                                 <Button
                                     onClick={() => {
                                         setLive(true);
-                                        setLiveFetch(true);
                                         setClusterData([]);
                                         setKeywords([]);
+                                        props.setFetchType("");
                                         props.setFetchData(false);
                                     }}
                                     variant={live ? "success" : "outline-success"}

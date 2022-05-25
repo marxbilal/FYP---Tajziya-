@@ -8,7 +8,7 @@ def json_for_single_wordcloud_dict(wordcloud_dict):
     for key in wordcloud_dict:
         wordcloud_dict.get(key)
         dict = {
-            "text" : key[::-1],
+            "text" : key,
             "value" : wordcloud_dict.get(key),
         }
         list.append(dict) 

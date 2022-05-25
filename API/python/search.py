@@ -13,7 +13,7 @@ class MyStreamListener(tweepy.Stream):
         self.add_to_df(dict)
         if(self.count == self.target):
             self.df.to_csv("./data/search_unclean_data.csv")
-            msg = "Searching 100 tweets containing keyword: "+ keyword
+            msg = {'success': "Searching 100 tweets containing keyword: "+ keyword}
             c = json.dumps(msg)
             print(c)
             exit()
@@ -21,7 +21,9 @@ class MyStreamListener(tweepy.Stream):
             self.count = self.count + 1
             
     def on_error(self,status_code):
-        print(status_code)
+        msg = {'error': "Python Exception "+ str(status_code)}
+        c = json.dumps(msg)
+        print(c)
 
     def add_to_df(self, dict):
         if(dict['truncated'] == True):
@@ -40,7 +42,9 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
 if (not api):
-    print("Authentication failed!")
+    msg = {'error': "Python Exception Auth failed"}
+    c = json.dumps(msg)
+    print(c)
     sys.exit(-1)
 
 myStreamListener = MyStreamListener(consumer_key,consumer_secret, access_token, access_token_secret)
@@ -52,7 +56,7 @@ if sys.argv[1] :
     
     myStreamListener.filter(track=track, languages=["ur"] )
 else:
-    msg = "No keyword was entered!"
+    msg = {'error':"Python Error No keyword was entered!"}
     c = json.dumps(msg)
     print(c)
 

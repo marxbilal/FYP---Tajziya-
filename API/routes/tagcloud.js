@@ -3,9 +3,9 @@ import { liveCloud, fileCloud, searchCloud } from "../controllers/tagcloud.js";
 
 const router = express.Router();
 
-router.get("/", liveCloud);
+router.post("/", liveCloud);
 
-router.get("/file", fileCloud);
+router.post("/file", fileCloud);
 
 router.post("/search", searchCloud);
 

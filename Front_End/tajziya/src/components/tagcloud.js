@@ -1,8 +1,7 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
-import { Button, Card, Col, Container, Image, ListGroup, Placeholder, Row, Spinner } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Card, Col, Container, ListGroup, Placeholder, Row, Spinner } from "react-bootstrap";
 import ReactWordcloud from "react-wordcloud";
-import words from "./words";
 
 const TagCloudPage = (props) => {
     const [data, setData] = useState([]);
@@ -11,8 +10,9 @@ const TagCloudPage = (props) => {
 
     useEffect(() => {
         if (props.fetchData) {
+            console.log(props.fetchType);
             axios
-                .get("http://localhost:8000/tagcloud", {})
+                .post("http://localhost:8000/tagcloud/" + props.fetchType, {})
                 .then((res) => {
                     setData(res.data);
                 })
@@ -102,6 +102,8 @@ const TagCloudPage = (props) => {
             ) : (
                 <ReactWordcloud
                     options={{
+                        direction: "rtl",
+                        dir: "rtl",
                         colors: ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"],
                         enableTooltip: false,
                         deterministic: true,
@@ -114,6 +116,8 @@ const TagCloudPage = (props) => {
                         scale: "sqrt",
                         spiral: "archimedean",
                     }}
+                    direction="rtl"
+                    dir="rtl"
                     words={data[cluster].data}
                 ></ReactWordcloud>
             );

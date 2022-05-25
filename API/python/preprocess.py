@@ -54,8 +54,9 @@ def preprocess_line(sentence):
 
 def preprocessFile(df):
     # df = pd.read_csv(path, encoding='utf-8', on_bad_lines='skip')
+    # del df["Unnamed: 0"]
     df['timestamp'] = pd.to_datetime(
-        df['timestamp'], format='%a %b %d %H:%M:%S +0000 %Y')
+        df['timestamp'])
 
     list1 = []
     for i in range(len(df.index)):
@@ -70,6 +71,20 @@ def preprocessFile(df):
     df2['timestamp'] = pd.to_datetime(
         df['timestamp'], format='%a %b %d %H:%M:%S +0000 %Y')
 
+    return df2
+
+def preprocessUserFile(df):
+    list1 = []
+    for i in range(len(df.index)):
+        sent = df[df.columns[1]][i]
+        list1.append(sent)
+
+    sent_p = []
+    for tweet in list1:
+        sent_p.append(preprocess_line(tweet))
+
+    df2 = pd.DataFrame(sent_p, columns=["tweets"])
+    
     return df2
 
 if __name__ == "__main__":

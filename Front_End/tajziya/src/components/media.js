@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Card, Col, Container, ListGroup, Placeholder, Row, Tab } from "react-bootstrap";
 import "./leftmenu.css";
 
@@ -12,7 +12,7 @@ const Media = (props) => {
     useEffect(() => {
         if (props.fetchData) {
             axios
-                .get("http://localhost:8000/media", {})
+                .post("http://localhost:8000/media/" + props.fetchType, {})
                 .then((res) => {
                     setData(res.data);
                 })
