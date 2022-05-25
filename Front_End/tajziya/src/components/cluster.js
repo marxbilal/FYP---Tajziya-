@@ -165,6 +165,20 @@ const Clustering = (props) => {
                 },
             },
         },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function (context) {
+                        let label = context.dataset.label || "";
+
+                        if (label) {
+                            return keywords[parseInt(label)].words;
+                        }
+                        return label;
+                    },
+                },
+            },
+        },
         responsive: true,
     };
 
