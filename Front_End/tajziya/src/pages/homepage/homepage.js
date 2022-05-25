@@ -10,6 +10,7 @@ import Media from "../../components/media";
 const HomePage = () => {
     const [selectedTab, setSelectedTab] = useState("cluster");
     const [fetchData, setFetchData] = useState(false);
+    const [clusterLabelColor, setClusterLabelColor] = useState([]);
 
     return (
         <Stack className="h-100">
@@ -17,10 +18,10 @@ const HomePage = () => {
 
             <Tab setSelectedTab={setSelectedTab}></Tab>
             <div className={selectedTab === "media" ? "flex-grow-1 overflow-hidden" : "flex-grow-1 overflow-auto"}>
-                <TagCloudPage display={selectedTab === "tagcloud"} fetchData={fetchData}></TagCloudPage>
-                <Cluster display={selectedTab === "cluster"} setFetchData={setFetchData}></Cluster>
+                <Cluster display={selectedTab === "cluster"} setFetchData={setFetchData} setClusterLabelColor={setClusterLabelColor}></Cluster>
+                <TagCloudPage display={selectedTab === "tagcloud"} fetchData={fetchData} clusterLabelColor={clusterLabelColor}></TagCloudPage>
+                <Media display={selectedTab === "media"} fetchData={fetchData} clusterLabelColor={clusterLabelColor}></Media>
                 <Help display={selectedTab === "help"}></Help>
-                <Media display={selectedTab === "media"} fetchData={fetchData}></Media>
             </div>
         </Stack>
     );

@@ -1,29 +1,24 @@
+import json
 import tweepy
 import pandas as pd
 import sys
-#import timestamp
-
 
 class MyStreamListener(tweepy.Stream):
 
     df = pd.DataFrame(columns=['tweets', 'timestamp'])
-    target = 1000
+    target = 5000
     count = 0
 
     def on_status(self, status):
-
-        # print(dir(status))
-        # print('\n {}'.format(status.truncated))
-        # exit()
-        # print(self.count)
-
         dict = status._json
         self.add_to_df(dict)
         if(self.count == self.target):
-            self.df.to_csv("..\\tweets_x.csv")
+            
+            self.df.to_csv("./data/live_unclean_data.csv")
             exit()
         else:
             self.count = self.count + 1
+            print(self.count)
 
     def on_error(self, status_code):
         print(status_code)
@@ -35,8 +30,6 @@ class MyStreamListener(tweepy.Stream):
         else:
             tweet = pd.DataFrame(
                 {'tweets': dict['text'], 'timestamp': dict['created_at']}, index=[self.count])
-        print('\n')
-        # print("{} TRUNCATED = {} ".format(tweet,dict['truncated']))
         self.df = pd.concat([self.df, tweet])
 
 
@@ -53,9 +46,10 @@ if (not api):
     print("Authentication failed!")
     sys.exit(-1)
 
-#myStreamListener = MyStreamListener()
-# myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
 myStreamListener = MyStreamListener(
     consumer_key, consumer_secret, access_token, access_token_secret)
-# myStream = tweepy.Stream(consumer_key,consumer_secret, access_token, access_token_secret) # auth = api.auth, listener=myStreamListener
-myStreamListener.filter(track=['ہو'], languages=["ur"])
+myStreamListener.filter(track=['آ,أ,ا,ب,پ,ت,ٹ,ث,,ج,چ,ح,خ,,د,ڈ,ذ,ر,ڑ,ز,ژ,,س,ش,ص,ض,ط,ظ,ع,غ,,ف,ق,ک,گ,ل,م,,ن,ں,و,ؤ,ۂ,ۃ,ء,ی,ئ,ے,ۓ,'
+], languages=["ur"])
+msg = "5000 live tweets fetched, and saved in file."
+c = json.dumps(msg)
+print(msg)

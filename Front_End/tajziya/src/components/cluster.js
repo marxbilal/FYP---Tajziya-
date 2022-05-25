@@ -59,12 +59,21 @@ const Clustering = (props) => {
     };
 
     useEffect(() => {
-        console.log("clusterData");
         axios
             .post("http://localhost:8000/cluster", {})
             .then((res) => {
+                console.log("clusterData");
                 setClusterData(res.data.data);
                 setKeywords(res.data.keywords);
+                let temp = [];
+                console.log(res.data.data.length);
+                for (let i = 0; i < res.data.data.length; i++) {
+                    temp.push({
+                        label: res.data.data[i].label,
+                        color: res.data.data[i].backgroundColor,
+                    });
+                }
+                props.setClusterLabelColor(temp);
                 props.setFetchData(true);
             })
             .catch((error) => {
@@ -84,12 +93,13 @@ const Clustering = (props) => {
                     <style type="text/css">
                         {`
                             .${"custom-header-" + i} {
-                            color: ${clusterData[i].backgroundColor};
+                            color: ${clusterData[i].backgroundColor} !important;
+                            font-weight: bold;
                             }
                             `}
                     </style>
                     <h2 className="accordion-header">
-                        <Accordion.Button className={"custom-header-" + i}>{"Cluster" + keywords[i].cluster}</Accordion.Button>
+                        <Accordion.Button className={"custom-header-" + i}>{"Cluster " + keywords[i].cluster}</Accordion.Button>
                     </h2>
 
                     <Accordion.Body>

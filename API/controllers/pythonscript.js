@@ -21,7 +21,7 @@ export const pythonScript = async (script, filter, key) => {
                     resolve(largeDataset);
                 }
             } catch (err) {
-                largeDataset = { error: "error parsing json" };
+                largeDataset = { error: err.toString() };
                 reject(largeDataset);
             }
         });

@@ -27,10 +27,26 @@ const Media = (props) => {
     const ClusterNames = () => {
         let ListItem = [];
         for (let i = 0; i < data.length; i++) {
+            let color = "black";
+            for (let j = 0; j < props.clusterLabelColor.length; j++) {
+                if (props.clusterLabelColor[j].label == data[i][0].label.split(" ")[1]) {
+                    color = props.clusterLabelColor[j].color;
+                }
+            }
             ListItem.push(
-                <ListGroup.Item action href={"#" + i + "&"} key={i + "labelmediakey"} style={{ color: "red" }}>
-                    {data[i][0].label}
-                </ListGroup.Item>
+                <div>
+                    <style type="text/css">
+                        {`
+                            .${"media-header-" + i} {
+                            color: ${color} !important;
+                            font-weight: bold;
+                            }
+                            `}
+                    </style>
+                    <ListGroup.Item action href={"#" + i + "&"} key={i + "labelmediakey"} className={"media-header-" + i}>
+                        {data[i][0].label}
+                    </ListGroup.Item>
+                </div>
             );
         }
         return ListItem;
@@ -46,16 +62,14 @@ const Media = (props) => {
                     <ListGroup.Item key={"media" + i + "&" + j + 5}>
                         <Container>
                             <Row>
-                                <Col md={11}>
-                                    <h2>{data[i][j].Tweet.split(" ").slice(0, 2).join(" ")}</h2>
-                                </Col>
+                                <Col md={11}>{/* <h2>{data[i][j].tweet.split(" ").slice(0, 2).join(" ")}</h2> */}</Col>
                                 <Col md={1} className="d-flex align-items-center">
-                                    <strong className="font-weight-bolder m-0">{data[i][j].Type}</strong>
+                                    <strong className="font-weight-bolder m-0">{data[i][j].type}</strong>
                                 </Col>
                             </Row>
                             <Row>
                                 <p className="text-justify">
-                                    {data[i][j].Tweet}
+                                    {data[i][j].tweet}
                                     <a href="#" onClick={() => {}}></a>
                                     {}
                                 </p>

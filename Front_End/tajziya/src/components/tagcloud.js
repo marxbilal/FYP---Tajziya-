@@ -7,6 +7,7 @@ import words from "./words";
 const TagCloudPage = (props) => {
     const [data, setData] = useState([]);
     const [cluster, setCluster] = useState(0);
+    const [activeTab, setActiveTab] = useState("#0&");
 
     useEffect(() => {
         if (props.fetchData) {
@@ -26,10 +27,27 @@ const TagCloudPage = (props) => {
     const ClusterNames = () => {
         let ListItem = [];
         for (let i = 0; i < data.length; i++) {
+            let color = "black";
+            for (let j = 0; j < props.clusterLabelColor.length; j++) {
+                if (props.clusterLabelColor[j].label == data[i].label.split(" ")[1]) {
+                    color = props.clusterLabelColor[j].color;
+                }
+            }
+
             ListItem.push(
-                <ListGroup.Item action href={"#" + i + "&"} key={i + "labelmediakey"} style={{ color: "red" }}>
-                    {data[i].label}
-                </ListGroup.Item>
+                <div>
+                    <style type="text/css">
+                        {`
+                            .${"tagcloud-header-" + i} {
+                            color: ${color} !important;
+                            font-weight: bold;
+                            }
+                            `}
+                    </style>
+                    <ListGroup.Item action href={"#" + i + "&"} key={i + "labelmediakey"} className={"tagcloud-header-" + i}>
+                        {data[i].label}
+                    </ListGroup.Item>
+                </div>
             );
         }
         return ListItem;
@@ -63,9 +81,10 @@ const TagCloudPage = (props) => {
                 </div>
             ) : (
                 <ListGroup
-                    defaultActiveKey={"#" + 0 + "&"}
+                    defaultActiveKey={activeTab}
                     onSelect={(key) => {
-                        setCluster(0);
+                        setActiveTab(key);
+                        setCluster(parseInt(key.substring(1, 2)));
                     }}
                 >
                     <ClusterNames></ClusterNames>
@@ -84,18 +103,18 @@ const TagCloudPage = (props) => {
                 <ReactWordcloud
                     options={{
                         colors: ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"],
-                        enableTooltip: true,
+                        enableTooltip: false,
                         deterministic: true,
                         fontFamily: "courier new",
                         fontSizes: [40, 60],
                         fontStyle: "normal",
                         fontWeight: "normal",
-                        padding: 1,
+                        padding: 2,
                         rotations: 0,
                         scale: "sqrt",
                         spiral: "archimedean",
                     }}
-                    words={data ? data[cluster].data : []}
+                    words={data[cluster].data}
                 ></ReactWordcloud>
             );
         return content;
