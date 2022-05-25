@@ -68,7 +68,7 @@ const Clustering = (props) => {
                     console.log(error);
                 });
         }
-    }, [live, props.fetchType]);
+    }, [live, props.fetchType, props.toggle]);
 
     const Labels = () => {
         let AccordianList = [];

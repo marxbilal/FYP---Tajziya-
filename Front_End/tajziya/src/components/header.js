@@ -9,6 +9,7 @@ const Header = (props) => {
     const handleClick = () => {
         setLoading(true);
         props.setFetchData(false);
+        props.setToggle(!props.toggle);
         if (word) {
             axios
                 .post("http://localhost:8000/search/", { keyword: word })
@@ -24,6 +25,14 @@ const Header = (props) => {
                 });
         }
     };
+
+    useEffect(() => {
+        if (!props.fetchData) {
+            setLoading(true);
+        } else {
+            setLoading(false);
+        }
+    }, [props.fetchData]);
 
     return (
         <Navbar bg="light">
@@ -46,7 +55,7 @@ const Header = (props) => {
                                 }}
                             />
                             <Button variant="outline-success" disabled={loading} onClick={handleClick}>
-                                {loading ? "Searching..." : "Search"}
+                                {loading ? "Loading.." : "Search"}
                             </Button>
                         </Form>
                     </Col>

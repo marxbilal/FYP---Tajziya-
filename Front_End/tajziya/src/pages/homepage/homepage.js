@@ -13,14 +13,24 @@ const HomePage = () => {
     const [fetchType, setFetchType] = useState("");
     const [searchKeyword, setSearchKeyword] = useState("");
     const [clusterLabelColor, setClusterLabelColor] = useState([]);
+    const [toggle, setToggle] = useState([]);
 
     return (
         <Stack className="h-100">
-            <Header setFetchType={setFetchType} setSearchKeyword={setSearchKeyword} setFetchData={setFetchData} fetchData={fetchData}></Header>
+            <Header
+                setFetchType={setFetchType}
+                setToggle={setToggle}
+                toggle={toggle}
+                setSearchKeyword={setSearchKeyword}
+                setFetchData={setFetchData}
+                fetchData={fetchData}
+            ></Header>
 
             <Tab setSelectedTab={setSelectedTab}></Tab>
             <div className={selectedTab === "media" ? "flex-grow-1 overflow-hidden" : "flex-grow-1 overflow-auto"}>
                 <Cluster
+                    toggle={toggle}
+                    setToggle={setToggle}
                     display={selectedTab === "cluster"}
                     setFetchData={setFetchData}
                     setClusterLabelColor={setClusterLabelColor}
@@ -29,6 +39,7 @@ const HomePage = () => {
                     searchKeyword={searchKeyword}
                 ></Cluster>
                 <TagCloudPage
+                    toggle={toggle}
                     display={selectedTab === "tagcloud"}
                     fetchData={fetchData}
                     fetchType={fetchType}
@@ -36,6 +47,7 @@ const HomePage = () => {
                     searchKeyword={searchKeyword}
                 ></TagCloudPage>
                 <Media
+                    toggle={toggle}
                     display={selectedTab === "media"}
                     fetchData={fetchData}
                     fetchType={fetchType}
