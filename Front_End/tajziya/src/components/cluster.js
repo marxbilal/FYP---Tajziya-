@@ -2,13 +2,14 @@ import axios from "axios";
 import { Bubble } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { useEffect, useState } from "react";
-import { Button, Container, Col, Row, ListGroup, Accordion, Placeholder, Card, Spinner, Form } from "react-bootstrap";
+import { Button, Container, Col, Row, ListGroup, Accordion, Placeholder, Card, Spinner, Form, Modal } from "react-bootstrap";
 
 const Clustering = (props) => {
     const [clusterData, setClusterData] = useState([]);
     const [keywords, setKeywords] = useState([]);
     const [file, setFile] = useState({ selectedFile: null });
     const [live, setLive] = useState(true);
+    const [show, setShow] = useState(false);
     // const [liveFetch, setLiveFetch] = useState(true);
 
     useEffect(() => {
@@ -38,6 +39,7 @@ const Clustering = (props) => {
                     props.setFetchData(true);
                 })
                 .catch((error) => {
+                    setShow(true);
                     console.log(error);
                 });
         }
@@ -67,6 +69,7 @@ const Clustering = (props) => {
                     props.setFetchData(true);
                 })
                 .catch((error) => {
+                    setShow(true);
                     console.log(error);
                 });
         }
@@ -185,6 +188,12 @@ const Clustering = (props) => {
 
     return (
         <div className={props.display ? "h-100" : "h-100 d-none"}>
+            <Modal show={show} onHide={() => setShow(false)} backdrop="static" keyboard={false} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Error Occured</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Please refresh page</Modal.Body>
+            </Modal>
             <Container fluid className="h-100">
                 <Row className="h-100">
                     <Col md={2}>

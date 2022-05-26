@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Container, ListGroup, Placeholder, Row, Spinner } from "react-bootstrap";
+import { Button, Card, Col, Container, ListGroup, Modal, Placeholder, Row, Spinner } from "react-bootstrap";
 import ReactWordcloud from "react-wordcloud";
 
 const TagCloudPage = (props) => {
@@ -8,6 +8,7 @@ const TagCloudPage = (props) => {
     const [cluster, setCluster] = useState(0);
     const [activeTab, setActiveTab] = useState("#0&");
     const [localRerun, setLocalRerun] = useState(true);
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
         if (props.fetchData) {
@@ -20,6 +21,7 @@ const TagCloudPage = (props) => {
                     }
                 })
                 .catch((error) => {
+                    setShow(true);
                     console.log(error);
                 });
         } else {
@@ -129,6 +131,12 @@ const TagCloudPage = (props) => {
 
     return (
         <div className={props.display ? "h-100" : "h-100 d-none"}>
+            <Modal show={show} onHide={() => setShow(false)} backdrop="static" keyboard={false} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Error Occured</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Please refresh page</Modal.Body>
+            </Modal>
             <Container fluid className="h-100">
                 <Row className="h-100">
                     <Col md={2}>

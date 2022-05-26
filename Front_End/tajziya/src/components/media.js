@@ -1,12 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Card, Col, Container, ListGroup, Placeholder, Row, Tab } from "react-bootstrap";
+import { Button, Card, Col, Container, ListGroup, Modal, Placeholder, Row, Tab } from "react-bootstrap";
 import "./leftmenu.css";
 
 const Media = (props) => {
     const [expand, setExpand] = useState(false);
     const [data, setData] = useState([]);
     const [type, setType] = useState("live");
+    const [show, setShow] = useState(false);
     // const [toggle, setToggle] = useState("#0&");
 
     useEffect(() => {
@@ -18,6 +19,7 @@ const Media = (props) => {
                     setData(res.data);
                 })
                 .catch((error) => {
+                    setShow(true);
                     console.log(error);
                 });
         } else {
@@ -173,6 +175,12 @@ const Media = (props) => {
 
     return (
         <div className={props.display ? " h-100" : "h-100 d-none"}>
+            <Modal show={show} onHide={() => setShow(false)} backdrop="static" keyboard={false} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Error Occured</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Please refresh page</Modal.Body>
+            </Modal>
             <Tab.Container id="media" defaultActiveKey="#0&" fluid className="h-100">
                 <Row className="h-100">
                     <Col md={2} className="ms-2">
