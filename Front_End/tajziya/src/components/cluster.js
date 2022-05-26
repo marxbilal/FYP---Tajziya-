@@ -3,7 +3,6 @@ import { Bubble } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { useEffect, useState } from "react";
 import { Button, Container, Col, Row, ListGroup, Accordion, Placeholder, Card, Spinner, Form } from "react-bootstrap";
-Chart.register(...registerables);
 
 const Clustering = (props) => {
     const [clusterData, setClusterData] = useState([]);
@@ -11,6 +10,10 @@ const Clustering = (props) => {
     const [file, setFile] = useState({ selectedFile: null });
     const [live, setLive] = useState(true);
     // const [liveFetch, setLiveFetch] = useState(true);
+
+    useEffect(() => {
+        Chart.register(...registerables);
+    });
 
     const onFileChange = (event) => {
         setFile({ selectedFile: event.target.files[0] });
@@ -47,14 +50,13 @@ const Clustering = (props) => {
             setKeywords([]);
         }
         if (live == true || props.fetchType == "search") {
+            console.log("Cluster fetching");
             axios
                 .post("http://localhost:8000/cluster/" + props.fetchType, {})
                 .then((res) => {
-                    console.log("clusterData");
                     setClusterData(res.data.data);
                     setKeywords(res.data.keywords);
                     let temp = [];
-                    console.log(res.data.data.length);
                     for (let i = 0; i < res.data.data.length; i++) {
                         temp.push({
                             label: res.data.data[i].label,
@@ -68,7 +70,7 @@ const Clustering = (props) => {
                     console.log(error);
                 });
         }
-    }, [live, props.fetchType, props.toggle]);
+    }, [live, props.toggle]);
 
     const Labels = () => {
         let AccordianList = [];
@@ -179,7 +181,6 @@ const Clustering = (props) => {
                 },
             },
         },
-        responsive: true,
     };
 
     return (

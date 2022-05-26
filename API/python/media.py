@@ -1,6 +1,7 @@
 import pandas as pd
 import sys
 import json
+import traceback
 
 def media_cluster_json(df):
     list = []
@@ -31,5 +32,6 @@ if __name__ == "__main__":
         print(json.dumps(output))
         
     except Exception as e:
-        c = json.dumps({'error': "Python Exception " + str(e)})
+        traceback_info = traceback.format_exc()
+        c = json.dumps({'error': "Python Exception " + str(traceback_info)})
         print(c)

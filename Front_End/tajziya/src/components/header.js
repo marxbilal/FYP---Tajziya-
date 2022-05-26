@@ -8,18 +8,21 @@ const Header = (props) => {
 
     const handleClick = () => {
         setLoading(true);
+        props.setShow(true);
         props.setFetchData(false);
-        props.setToggle(!props.toggle);
         if (word) {
             axios
                 .post("http://localhost:8000/search/", { keyword: word })
                 .then((res) => {
                     console.log(res.data);
                     setLoading(false);
+                    props.setToggle(!props.toggle);
                     props.setFetchType("search");
+                    props.setShow(false);
                 })
                 .catch((error) => {
                     setLoading(false);
+                    props.setShow(false);
                     alert("Error occured");
                     console.log(error);
                 });

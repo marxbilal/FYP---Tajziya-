@@ -28,6 +28,7 @@ export const searchCluster = async (req, res) => {
         res.status(200).json(largeDataset);
     } catch (err) {
         res.status(500).json(err);
+        console.log("Error in cluster");
         console.log(err);
     }
 };

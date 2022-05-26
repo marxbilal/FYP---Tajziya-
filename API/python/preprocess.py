@@ -50,6 +50,10 @@ def preprocess_line(sentence):
     sentence = new_sentence
     sentence = normalize_whitespace(sentence)
 
+    if(not sentence):
+        sentence = "پاکستان"
+    
+
     return sentence
 
 def preprocessFile(df):
@@ -84,7 +88,6 @@ def preprocessUserFile(df):
         sent_p.append(preprocess_line(tweet))
 
     df2 = pd.DataFrame(sent_p, columns=["tweets"])
-    
     return df2
 
 if __name__ == "__main__":

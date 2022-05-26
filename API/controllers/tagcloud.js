@@ -26,7 +26,7 @@ export const searchCloud = async (req, res) => {
         let largeDataset = await pythonScript("./python/word_cloud.py", "search", keyword);
         res.status(200).json(largeDataset);
     } catch (err) {
-        res.status(500).json(err);
+        console.log("Error in search");
         console.log(err);
     }
 };

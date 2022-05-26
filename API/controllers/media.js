@@ -26,6 +26,7 @@ export const searchMedia = async (req, res) => {
         let largeDataset = await pythonScript("./python/media.py", "search", keyword);
         res.status(200).json(largeDataset);
     } catch (err) {
+        console.log("Error in media");
         res.status(500).json(err);
         console.log(err);
     }

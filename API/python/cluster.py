@@ -8,6 +8,7 @@ from sklearn.decomposition import PCA
 import pandas as pd
 import json
 import traceback
+import random
 
 
 def topKeywords(model, terms, k, n):
@@ -38,11 +39,11 @@ def tfidf(data):
 def KneePoint(tf_idf_array, terms):
     a = pd.DataFrame(tf_idf_array, columns=terms)
     wcss_list = [] 
-    for i in range(2, 15): 
+    for i in range(2, 12): 
         kmeans = KMeans(n_clusters = i, init = 'k-means++')
         kmeans.fit(a) 
         wcss_list.append(kmeans.inertia_)
-    kn = KneeLocator(range(2,15), wcss_list, curve='convex', direction='decreasing')
+    kn = KneeLocator(range(2,12), wcss_list, curve='convex', direction='decreasing')
     optimal_cluster = kn.knee
     return optimal_cluster
 
@@ -72,7 +73,11 @@ def transformToDataset(raw):
     colors = ['#5e6def','#ff69a2', '#81da5e', '#ffd143', '#ef0d12', '#4e3383','#3dcfb7', '#be6068', '#136c1d', '#d07fa7', '#9fe9f4', '#f1bdf4']
     color_index = 0
     for i in clusterName:
-        hexColor = colors[color_index]
+        if(color_index >= len(colors)):
+            r = lambda: random.randint(0,255)
+            hexColor = '#%02X%02X%02X' % (r(),r(),r())
+        else:
+            hexColor = colors[color_index]
         color_index +=1
         cluster.append({'label': i, 'data': [], 'backgroundColor': hexColor})
 
@@ -119,7 +124,10 @@ if __name__ == "__main__":
 
         k = KneePoint(tf_idf_array, terms)
 
-        labels, cluster = cluster(k, tf_idf_array, terms)
+        if(k):
+            labels, cluster = cluster(k, tf_idf_array, terms)
+        else:
+            labels, cluster = cluster(5, tf_idf_array, terms)
 
         #writing labeled file for media/wordcloud
         if(sys.argv[1] == "file"):
@@ -133,7 +141,7 @@ if __name__ == "__main__":
             unclean_data.insert(2, "cluster", labels, True)
             del unclean_data["Unnamed: 0"]
             unclean_data.to_csv("./data/search_unclean_data.csv")
-
+            
             clean_data.insert(1, "cluster", labels, True)
             clean_data.to_csv("./data/search_clean_data.csv")
         else:

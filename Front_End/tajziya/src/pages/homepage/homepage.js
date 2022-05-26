@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Stack } from "react-bootstrap";
+import { Modal, Stack } from "react-bootstrap";
 import Cluster from "../../components/cluster";
 import Header from "../../components/header";
 import Tab from "../../components/tab";
@@ -13,7 +13,8 @@ const HomePage = () => {
     const [fetchType, setFetchType] = useState("");
     const [searchKeyword, setSearchKeyword] = useState("");
     const [clusterLabelColor, setClusterLabelColor] = useState([]);
-    const [toggle, setToggle] = useState([]);
+    const [toggle, setToggle] = useState(false);
+    const [show, setShow] = useState(false);
 
     return (
         <Stack className="h-100">
@@ -24,6 +25,7 @@ const HomePage = () => {
                 setSearchKeyword={setSearchKeyword}
                 setFetchData={setFetchData}
                 fetchData={fetchData}
+                setShow={setShow}
             ></Header>
 
             <Tab setSelectedTab={setSelectedTab}></Tab>
@@ -55,6 +57,12 @@ const HomePage = () => {
                     searchKeyword={searchKeyword}
                 ></Media>
                 <Help display={selectedTab === "help"}></Help>
+                <Modal show={show} onHide={() => setShow(false)} backdrop="static" keyboard={false} centered>
+                    <Modal.Header>
+                        <Modal.Title>Please Wait</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Searching for tweets</Modal.Body>
+                </Modal>
             </div>
         </Stack>
     );

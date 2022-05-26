@@ -7,6 +7,7 @@ const TagCloudPage = (props) => {
     const [data, setData] = useState([]);
     const [cluster, setCluster] = useState(0);
     const [activeTab, setActiveTab] = useState("#0&");
+    const [localRerun, setLocalRerun] = useState(true);
 
     useEffect(() => {
         if (props.fetchData) {
@@ -14,7 +15,9 @@ const TagCloudPage = (props) => {
             axios
                 .post("http://localhost:8000/tagcloud/" + props.fetchType, {})
                 .then((res) => {
-                    setData(res.data);
+                    if (res.data) {
+                        setData(res.data);
+                    }
                 })
                 .catch((error) => {
                     console.log(error);
@@ -22,7 +25,7 @@ const TagCloudPage = (props) => {
         } else {
             setData([]);
         }
-    }, [props.fetchData]);
+    }, [props.fetchData, props.toggle, localRerun]);
 
     const ClusterNames = () => {
         let ListItem = [];

@@ -11,6 +11,7 @@ const Media = (props) => {
 
     useEffect(() => {
         if (props.fetchData) {
+            console.log(" I AM RUNNING BEFORE CLUSTER");
             axios
                 .post("http://localhost:8000/media/" + props.fetchType, {})
                 .then((res) => {
@@ -22,7 +23,7 @@ const Media = (props) => {
         } else {
             setData([]);
         }
-    }, [props.fetchData]);
+    }, [props.fetchData, props.toggle]);
 
     const ClusterNames = () => {
         let ListItem = [];
