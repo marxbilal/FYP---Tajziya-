@@ -9,16 +9,16 @@ def media_cluster_json(df):
         temp_df = df[df['cluster']==label]
         list1 = []
         for i in temp_df.iloc:
-            type = "Tweet"
-            title = "Tweet"
-            if('type' in i):
-                type = i['type']
-            elif('title' in i):
-                title = i['title']
+            # type = "Tweet"
+            # title = "Tweet"
+            # if('type' in i):
+            #     type = i['type']
+            # elif('title' in i):
+            #     title = i['title']
             dict = {
                 "label" : "Cluster "+str(label),
-                "type" : type,
-                "title": title,
+                "type" : i['type'],
+                "title": i['title'],
                 "tweet" : i['tweets']
             }
             list1.append(dict)
