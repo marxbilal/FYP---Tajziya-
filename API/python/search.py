@@ -27,9 +27,13 @@ class MyStreamListener(tweepy.Stream):
 
     def add_to_df(self, dict):
         if(dict['truncated'] == True):
-            tweet = pd.DataFrame({'tweets': dict['extended_tweet']['full_text'], 'timestamp': dict['created_at']},index = [self.count])
+            tweet = pd.DataFrame(
+                {'tweets': dict['extended_tweet']['full_text'], 'timestamp': dict['created_at'],"type":"Tweet","title":"User: " + dict["user"]["screen_name"]}, index=[self.count])
         else:
-            tweet = pd.DataFrame({'tweets': dict['text'], 'timestamp': dict['created_at']},index = [self.count])
+            if(dict.get("retweeted_status") and dict["retweeted_status"].get("extended_tweet")):
+                tweet = pd.DataFrame({'tweets': dict['retweeted_status']['extended_tweet']['full_text'], 'timestamp': dict['created_at'],"type":"Tweet","title":"User: " + dict["user"]["screen_name"]}, index=[self.count])
+            else:
+                tweet = pd.DataFrame({'tweets': dict['text'], 'timestamp': dict['created_at'],"type":"Tweet","title":"User: " + dict["user"]["screen_name"]}, index=[self.count])
         self.df = pd.concat([self.df,tweet])
         
 consumer_key="Wvu5aNI0IuUKqQLTDC9W3uuyF"

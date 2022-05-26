@@ -150,6 +150,7 @@ const Clustering = (props) => {
             clusterData.length === 0 ? (
                 <div className="h-100 d-flex align-items-center justify-content-center">
                     <Spinner animation="border" style={{ width: "20rem", height: "20rem", borderWidth: "1rem" }} />
+                    <h1>Calculating optimal clusters</h1>
                 </div>
             ) : (
                 <Bubble options={options} data={{ datasets: clusterData }} />
@@ -174,7 +175,7 @@ const Clustering = (props) => {
             tooltip: {
                 callbacks: {
                     label: function (context) {
-                        let label = context.dataset.label || "";
+                        let label = context.dataset.label || "0";
 
                         if (label) {
                             return keywords[parseInt(label)].words;

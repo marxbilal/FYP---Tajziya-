@@ -65,7 +65,9 @@ const Media = (props) => {
                     <ListGroup.Item key={"media" + i + "&" + j + 5}>
                         <Container>
                             <Row>
-                                <Col md={11}>{/* <h2>{data[i][j].tweet.split(" ").slice(0, 2).join(" ")}</h2> */}</Col>
+                                <Col md={11}>
+                                    <h2>{data[i][j].title}</h2>
+                                </Col>
                                 <Col md={1} className="d-flex align-items-center">
                                     <strong className="font-weight-bolder m-0">{data[i][j].type}</strong>
                                 </Col>

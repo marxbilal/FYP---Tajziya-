@@ -69,7 +69,17 @@ def transformToDataset(raw):
     Y_sklearn, labels, keywords = raw
 
     clusterName = set(labels)
-    
+    unique_tweets = {}
+    for i in range(0, len(Y_sklearn)):
+        x = str(Y_sklearn[i][0])
+        y = str(Y_sklearn[i][1])
+        if x + "_" + y in unique_tweets:
+            unique_tweets[x + "_" +y] += 1 
+        else:
+            unique_tweets[x + "_" +y] = 1  
+
+
+
     colors = ['#5e6def','#ff69a2', '#81da5e', '#ffd143', '#ef0d12', '#4e3383','#3dcfb7', '#be6068', '#136c1d', '#d07fa7', '#9fe9f4', '#f1bdf4']
     color_index = 0
     for i in clusterName:
@@ -82,11 +92,20 @@ def transformToDataset(raw):
         cluster.append({'label': i, 'data': [], 'backgroundColor': hexColor})
 
     for i in range(0, len(Y_sklearn)):
-        data = {
-            'x': Y_sklearn[i][0],
-            'y': Y_sklearn[i][1],
-            'r': 10
-        }
+        x = str(Y_sklearn[i][0])
+        y = str(Y_sklearn[i][1])
+        if unique_tweets[x + "_" +y] > 10 :
+            data = {
+                'x': Y_sklearn[i][0],
+                'y': Y_sklearn[i][1],
+                'r': 10* unique_tweets[x + "_" + y]/10
+            }
+        else:
+            data = {
+                'x': Y_sklearn[i][0],
+                'y': Y_sklearn[i][1],
+                'r': 10
+            }
         n = labels[i]
         cluster[n]['data'].append(data)
 

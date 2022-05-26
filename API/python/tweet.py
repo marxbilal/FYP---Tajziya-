@@ -5,8 +5,8 @@ import sys
 
 class MyStreamListener(tweepy.Stream):
 
-    df = pd.DataFrame(columns=['tweets', 'timestamp'])
-    target = 1000
+    df = pd.DataFrame(columns=['tweets', 'timestamp','type','title'])
+    target = 500
     count = 0
 
     def on_status(self, status):
@@ -14,7 +14,7 @@ class MyStreamListener(tweepy.Stream):
         self.add_to_df(dict)
         if(self.count == self.target):
             
-            self.df.to_csv("./data/testingForComplete.csv")
+            self.df.to_csv("./data/tweets.csv")
             exit()
         else:
             self.count = self.count + 1
@@ -24,15 +24,15 @@ class MyStreamListener(tweepy.Stream):
         print(status_code)
 
     def add_to_df(self, dict):
-        print(dict)
+        print("\n")
         if(dict['truncated'] == True):
             tweet = pd.DataFrame(
-                {'tweets': dict['extended_tweet']['full_text'], 'timestamp': dict['created_at']}, index=[self.count])
+                {'tweets': dict['extended_tweet']['full_text'], 'timestamp': dict['created_at'],"type":"Tweet","title":"User: " + dict["user"]["screen_name"]}, index=[self.count])
         else:
             if(dict.get("retweeted_status") and dict["retweeted_status"].get("extended_tweet")):
-                tweet = pd.DataFrame({'tweets': dict['retweeted_status']['extended_tweet']['full_text'], 'timestamp': dict['created_at']}, index=[self.count])
+                tweet = pd.DataFrame({'tweets': dict['retweeted_status']['extended_tweet']['full_text'], 'timestamp': dict['created_at'],"type":"Tweet","title":"User: " + dict["user"]["screen_name"]}, index=[self.count])
             else:
-                tweet = pd.DataFrame({'tweets': dict['text'], 'timestamp': dict['created_at']}, index=[self.count])
+                tweet = pd.DataFrame({'tweets': dict['text'], 'timestamp': dict['created_at'],"type":"Tweet","title":"User: " + dict["user"]["screen_name"]}, index=[self.count])
         self.df = pd.concat([self.df, tweet])
 
 

@@ -94,4 +94,4 @@ if __name__ == "__main__":
     df = readfromDB()
 
     preprocessed_df = preprocessFile(df)
-    preprocessed_df.to_csv("./data/testing_urduhack_normalize.csv")
+    preprocessed_df.to_csv("./data/preprocessed_default.csv")
