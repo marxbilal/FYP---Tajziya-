@@ -35,11 +35,10 @@ class MyStreamListener(tweepy.Stream):
                 tweet = pd.DataFrame({'tweets': dict['text'], 'timestamp': dict['created_at'],"type":"Tweet","title":"User: " + dict["user"]["screen_name"]}, index=[self.count])
         self.df = pd.concat([self.df, tweet])
 
-
-consumer_key = "Wvu5aNI0IuUKqQLTDC9W3uuyF"
-consumer_secret = "IhD10WzLgtNmHzCdXVRwLKN3g4QJw6aOzVo1poYQqZ2LV42dhl"
-access_token = "1270342846911057923-1dk6FZBLvoHKPev6387c5Sd3AXKdLg"
-access_token_secret = "xdcoA3lH9tAgPfqPp3ihQZF6OpVq3OsDgv3hgbdwltMQo"
+consumer_key = "4WW3Lb5J8vc8NO6FWAr0h0c1A"
+consumer_secret = "d0kh3cWDbfpqm3sl4Ft274DqRQbGogkJaGzMprCAo2u0IPIdtD"
+access_token = "1270342846911057923-FBZumgMPJ6bDLeTQH8TOmmnowvcM7G"
+access_token_secret = "SHrZmhE7QEzpgt4xZwW3oGAxQvrG8kZLOfWq6uqFmYFethhu"
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)

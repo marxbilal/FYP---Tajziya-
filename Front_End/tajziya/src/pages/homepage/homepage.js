@@ -25,7 +25,7 @@ const HomePage = () => {
                 setSearchKeyword={setSearchKeyword}
                 setFetchData={setFetchData}
                 fetchData={fetchData}
-                setShow={setShow}
+                //setShow={setShow}
             ></Header>
 
             <Tab setSelectedTab={setSelectedTab}></Tab>
